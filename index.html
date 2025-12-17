@@ -10,7 +10,7 @@
             --bg-color: #ffffff;
             --text-color: #000000;
             --font-main: Verdana, Geneva, Tahoma, sans-serif;
-            --font-size: 14px; /* Taille "Zoomée" lisible */
+            --font-size: 14px;
         }
 
         body, html {
@@ -25,7 +25,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- NAVIGATION --- */
         a {
             color: var(--text-color);
             text-decoration: none;
@@ -55,7 +54,7 @@
         #intro-screen img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Remplit tout l'écran */
         }
 
         /* --- SITE PRINCIPAL --- */
@@ -79,7 +78,7 @@
             letter-spacing: 2px;
             cursor: pointer;
             display: inline-block;
-            user-select: none; /* Evite de sélectionner le texte en cliquant vite */
+            user-select: none;
         }
 
         nav ul { list-style: none; padding: 0; margin: 0; }
@@ -100,7 +99,6 @@
             #main-site { padding: 25px; }
         }
 
-        /* --- ZONES DE CONTENU --- */
         .content-section {
             display: none;
             animation: fadeIn 0.6s ease;
@@ -125,7 +123,6 @@
             display: block;
         }
 
-        /* --- CONTENU TEXTE --- */
         h3 {
             font-size: 0.95rem;
             text-transform: uppercase;
@@ -162,7 +159,7 @@
 <body>
 
     <div id="intro-screen">
-        <img id="intro-image" src="" alt="Intro">
+        <img id="intro-image" src="load.jpg" alt="Intro">
     </div>
 
     <div id="main-site">
@@ -244,23 +241,22 @@
     </div>
 
     <script>
-        // --- VOS PHOTOS ---
-        const myPhotos = [
-            "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=2058&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1948&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1500964757637-c85e8a162699?q=80&w=2103&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&w=2000&auto=format&fit=crop"
+        // --- CONFIGURATION DES PHOTOS ---
+        // Le code va chercher ces fichiers exacts.
+        const homePhotos = [
+            "acceuil1.jpg",
+            "acceuil2.jpg",
+            "acceuil3.jpg"
+            // Tu peux ajouter "acceuil4.jpg" ici si tu veux plus tard
         ];
 
-        // 1. AU CHARGEMENT (OnLoad)
+        // 1. CHARGEMENT
         window.onload = function() {
-            // Photo intro
-            const indexIntro = Math.floor(Math.random() * myPhotos.length);
-            document.getElementById('intro-image').src = myPhotos[indexIntro];
+            // NOTE: L'image d'intro est fixée à "load.jpg" directement dans le HTML plus haut.
 
-            // Photo accueil initiale
-            const indexHome = Math.floor(Math.random() * myPhotos.length);
-            document.getElementById('home-random-img').src = myPhotos[indexHome];
+            // On choisit une image aléatoire pour l'accueil (le cadre blanc)
+            const indexHome = Math.floor(Math.random() * homePhotos.length);
+            document.getElementById('home-random-img').src = homePhotos[indexHome];
 
             // Animation Fade
             setTimeout(function() {
@@ -272,30 +268,23 @@
             }, 1500);
         };
 
-        // 2. FONCTION NAVIGATION SIMPLE
+        // 2. NAVIGATION PAGES
         function showPage(pageId) {
-            // Cache l'accueil
             document.getElementById('home-view').style.display = 'none';
-            // Cache les autres pages
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
-            // Affiche la bonne page
             const active = document.getElementById(pageId);
             if(active) active.classList.add('active-section');
             window.scrollTo(0,0);
         }
 
-        // 3. FONCTION RETOUR ACCUEIL + CHANGEMENT PHOTO
+        // 3. RETOUR ACCUEIL (Change la photo)
         function goHome() {
-            // Cache tout le texte
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
-            
-            // Affiche la vue accueil
             document.getElementById('home-view').style.display = 'flex';
             
-            // --- C'EST ICI QUE CA SE PASSE ---
-            // On tire une nouvelle photo aléatoire uniquement maintenant
-            const newIndex = Math.floor(Math.random() * myPhotos.length);
-            document.getElementById('home-random-img').src = myPhotos[newIndex];
+            // Nouvelle photo aléatoire
+            const newIndex = Math.floor(Math.random() * homePhotos.length);
+            document.getElementById('home-random-img').src = homePhotos[newIndex];
             
             window.scrollTo(0,0);
         }
