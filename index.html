@@ -9,8 +9,10 @@
         :root {
             --bg-color: #ffffff;
             --text-color: #000000;
+            /* Police Verdana (Style Art Contemporain / Brut) */
             --font-main: Verdana, Geneva, Tahoma, sans-serif;
-            --font-size: 14px;
+            /* Taille de police "Zoomée" pour lisibilité optimale */
+            --font-size: 14px; 
         }
 
         body, html {
@@ -25,6 +27,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* --- LIENS --- */
         a {
             color: var(--text-color);
             text-decoration: none;
@@ -35,7 +38,7 @@
         
         a:hover { color: #666; }
 
-        /* --- INTRO SPLASH --- */
+        /* --- INTRO SPLASH (Image de chargement) --- */
         #intro-screen {
             position: fixed;
             top: 0;
@@ -47,17 +50,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 2.0s ease-in-out;
+            transition: opacity 2.0s ease-in-out; /* Durée du fondu */
             pointer-events: none;
         }
 
         #intro-screen img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Remplit tout l'écran */
+            object-fit: cover;
         }
 
-        /* --- SITE PRINCIPAL --- */
+        /* --- CONTENEUR PRINCIPAL --- */
         #main-site {
             opacity: 0;
             transition: opacity 2s ease-in;
@@ -68,6 +71,7 @@
             min-height: 100vh;
         }
 
+        /* --- HEADER --- */
         header { margin-bottom: 70px; }
 
         h1 {
@@ -94,11 +98,13 @@
 
         nav li:hover { color: #000; }
         
+        /* Version Mobile */
         @media (max-width: 600px) {
             nav li { display: block; margin-bottom: 15px; }
             #main-site { padding: 25px; }
         }
 
+        /* --- SECTIONS (Cachées par défaut) --- */
         .content-section {
             display: none;
             animation: fadeIn 0.6s ease;
@@ -107,7 +113,7 @@
 
         .active-section { display: block; }
 
-        /* --- VUE ACCUEIL (PHOTO CADRÉE) --- */
+        /* --- VUE ACCUEIL (Photo Cadrée) --- */
         #home-view {
             display: flex;
             justify-content: center;
@@ -123,6 +129,7 @@
             display: block;
         }
 
+        /* --- MISE EN PAGE DU TEXTE --- */
         h3 {
             font-size: 0.95rem;
             text-transform: uppercase;
@@ -191,6 +198,13 @@
                     <p style="margin:0; font-style:italic; color:#666;">Solo show.</p>
                 </div>
             </div>
+            <div class="list-item">
+                <div class="year">2025</div>
+                <div class="details">
+                    <a href="#" class="title-link">Staatspreis NRW</a>
+                    <span>Award ceremony</span>
+                </div>
+            </div>
         </div>
 
         <div id="exhibitions" class="content-section">
@@ -241,43 +255,47 @@
     </div>
 
     <script>
-        // --- CONFIGURATION DES PHOTOS ---
-        // Le code va chercher ces fichiers exacts.
+        // --- CONFIGURATION IMAGES ---
         const homePhotos = [
             "acceuil1.jpg",
             "acceuil2.jpg",
             "acceuil3.jpg"
-            // Tu peux ajouter "acceuil4.jpg" ici si tu veux plus tard
         ];
 
         // 1. CHARGEMENT
         window.onload = function() {
-            // NOTE: L'image d'intro est fixée à "load.jpg" directement dans le HTML plus haut.
+            // NOTE: "load.jpg" est dans le HTML
 
-            // On choisit une image aléatoire pour l'accueil (le cadre blanc)
+            // Préparation image accueil
             const indexHome = Math.floor(Math.random() * homePhotos.length);
             document.getElementById('home-random-img').src = homePhotos[indexHome];
 
-            // Animation Fade
+            // --- TIMING NEUROMARKETING (3488ms) ---
             setTimeout(function() {
                 const intro = document.getElementById('intro-screen');
                 const main = document.getElementById('main-site');
+                
+                // Début Fade Out
                 intro.style.opacity = '0'; 
                 main.style.opacity = '1';  
+                
+                // Suppression Intro après animation
                 setTimeout(() => { intro.style.display = 'none'; }, 2000);
-            }, 1500);
+
+            }, 3488); // <--- Temps exact demandé
         };
 
-        // 2. NAVIGATION PAGES
+        // 2. NAVIGATION
         function showPage(pageId) {
             document.getElementById('home-view').style.display = 'none';
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
+            
             const active = document.getElementById(pageId);
             if(active) active.classList.add('active-section');
             window.scrollTo(0,0);
         }
 
-        // 3. RETOUR ACCUEIL (Change la photo)
+        // 3. RETOUR ACCUEIL
         function goHome() {
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
             document.getElementById('home-view').style.display = 'flex';
