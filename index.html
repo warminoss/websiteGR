@@ -9,9 +9,7 @@
         :root {
             --bg-color: #ffffff;
             --text-color: #000000;
-            /* Police Verdana (Style Art Contemporain / Brut) */
             --font-main: Verdana, Geneva, Tahoma, sans-serif;
-            /* Taille de police "Zoomée" */
             --font-size: 14px; 
         }
 
@@ -38,7 +36,7 @@
         
         a:hover { color: #666; }
 
-        /* --- INTRO SPLASH (Image load.jpg) --- */
+        /* --- INTRO SPLASH --- */
         #intro-screen {
             position: fixed;
             top: 0;
@@ -64,7 +62,7 @@
         #main-site {
             opacity: 0;
             transition: opacity 2s ease-in;
-            padding: 50px;
+            padding: 40px;
             max-width: 960px;
             margin: 0 auto;
             position: relative;
@@ -72,12 +70,12 @@
         }
 
         /* --- HEADER --- */
-        header { margin-bottom: 70px; }
+        header { margin-bottom: 40px; }
 
         h1 {
             font-size: 1.4rem;
             text-transform: uppercase;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
             font-weight: normal;
             letter-spacing: 2px;
             cursor: pointer;
@@ -90,7 +88,7 @@
         nav li {
             text-transform: uppercase;
             cursor: pointer;
-            margin-right: 35px;
+            margin-right: 30px;
             display: inline-block;
             font-size: 0.95rem;
             color: #888;
@@ -99,7 +97,7 @@
         nav li:hover { color: #000; }
         
         @media (max-width: 600px) {
-            nav li { display: block; margin-bottom: 15px; }
+            nav li { display: block; margin-bottom: 12px; }
             #main-site { padding: 25px; }
         }
 
@@ -107,24 +105,29 @@
         .content-section {
             display: none;
             animation: fadeIn 0.6s ease;
-            padding-bottom: 120px;
+            padding-bottom: 100px;
         }
 
         .active-section { display: block; }
 
-        /* --- VUE ACCUEIL (Photo Cadrée) --- */
+        /* --- VUE ACCUEIL (CORRECTION TAILLE IMAGE) --- */
         #home-view {
             display: flex;
             justify-content: center;
-            align-items: center;
-            margin-top: 5vh;
+            align-items: flex-start; /* Aligné vers le haut pour éviter le scroll */
+            margin-top: 2vh;
+            width: 100%;
         }
 
         .framed-image {
-            max-width: 80%;
-            max-height: 65vh;
-            border: 20px solid white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            /* C'est ici qu'on règle la taille */
+            max-width: 100%;      /* Ne dépasse pas la largeur du mobile */
+            max-height: 55vh;     /* MAXIMUM 55% de la hauteur de l'écran (plus petit) */
+            width: auto;          /* Garde les proportions */
+            height: auto;
+            
+            border: 15px solid white; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08); 
             display: block;
         }
 
@@ -256,14 +259,14 @@
     <script>
         // --- CONFIGURATION IMAGES ---
         const homePhotos = [
-            "accuil2.jpeg"  // <--- TON FICHIER EXACT
+            "accuil2.jpeg"  // Le fichier avec ton orthographe exacte
         ];
 
         // 1. CHARGEMENT
         window.onload = function() {
-            // "load.jpg" est géré par le HTML
+            // Load.jpg est géré par le HTML
             
-            // On prépare l'image d'accueil
+            // Préparation image accueil
             const indexHome = Math.floor(Math.random() * homePhotos.length);
             document.getElementById('home-random-img').src = homePhotos[indexHome];
 
@@ -295,7 +298,6 @@
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
             document.getElementById('home-view').style.display = 'flex';
             
-            // Recharge l'image (utile si tu rajoutes d'autres photos plus tard)
             const newIndex = Math.floor(Math.random() * homePhotos.length);
             document.getElementById('home-random-img').src = homePhotos[newIndex];
             
