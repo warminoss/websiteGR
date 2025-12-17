@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GUILLAUME ROBINET</title>
     <style>
         /* --- STYLE GENERAL --- */
@@ -13,16 +13,20 @@
             --font-size: 14px; 
         }
 
+        /* SUPPRESSION DU SCROLL SUR TOUT LE SITE */
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
+            width: 100%;
             font-family: var(--font-main);
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: var(--font-size);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            overflow: hidden; /* EMPECHE TOUT SCROLL */
+            position: fixed;  /* FIXE LA PAGE SUR IPHONE */
         }
 
         a {
@@ -64,7 +68,6 @@
                 max-height: 85vh;
                 max-width: 100%;
                 object-fit: contain;
-                box-shadow: 0 0 30px rgba(0,0,0,0.05);
             }
         }
 
@@ -75,16 +78,18 @@
             padding: 40px;
             max-width: 960px;
             margin: 0 auto;
-            position: relative;
-            min-height: 100vh;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
         }
 
-        header { margin-bottom: 40px; }
+        header { margin-bottom: 20px; flex-shrink: 0; }
 
         h1 {
             font-size: 1.4rem;
             text-transform: uppercase;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-weight: normal;
             letter-spacing: 2px;
             cursor: pointer;
@@ -106,32 +111,33 @@
         nav li:hover { color: #000; }
         
         @media (max-width: 600px) {
-            nav li { display: block; margin-bottom: 12px; }
+            nav li { display: block; margin-bottom: 10px; }
             #main-site { padding: 25px; }
         }
 
+        /* --- SECTIONS --- */
         .content-section {
             display: none;
             animation: fadeIn 0.6s ease;
-            padding-bottom: 100px;
+            overflow-y: auto; /* Permet le scroll UNIQUEMENT à l'intérieur des textes longs */
+            height: 100%;
         }
 
         .active-section { display: block; }
 
-        /* --- VUE ACCUEIL AJUSTÉE POUR IPHONE --- */
+        /* --- VUE ACCUEIL (FIXE SANS SCROLL) --- */
         #home-view {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            /* L'astuce est ici : on pousse l'image vers le haut tout en laissant de l'espace en bas */
-            padding-top: 5vh; 
-            padding-bottom: 15vh; /* Espace de sécurité en bas pour éviter d'être collé au bord du tel */
+            flex-grow: 1; /* Prend tout l'espace central */
             width: 100%;
+            overflow: hidden;
         }
 
         .framed-image {
             max-width: 100%;
-            max-height: 50vh; /* Légèrement réduit pour laisser de l'espace */
+            max-height: 60vh; 
             width: auto;
             height: auto;
             border: 15px solid white; 
@@ -144,15 +150,14 @@
             font-size: 0.95rem;
             text-transform: uppercase;
             font-weight: bold;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
             letter-spacing: 1px;
             border-bottom: 1px solid #eee;
             padding-bottom: 15px;
-            margin-top: 0;
         }
 
         .list-item {
-            margin-bottom: 45px;
+            margin-bottom: 30px;
             display: grid;
             grid-template-columns: 70px 1fr;
         }
@@ -164,8 +169,6 @@
             border-bottom: 1px solid #eee;
             padding-bottom: 2px;
         }
-
-        .title-link:hover { border-bottom: 1px solid #000; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -193,7 +196,7 @@
             </nav>
         </header>
 
-        <div id="home-view">
+        <div id="home-view" class="active-section">
             <img id="home-random-img" class="framed-image" src="" alt="Art">
         </div>
 
@@ -205,13 +208,6 @@
                     <a href="#" class="title-link">Inherited Images</a>
                     <span>Sprüth Magers New York</span>
                     <p style="margin:0; font-style:italic; color:#666;">Solo show.</p>
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="year">2025</div>
-                <div class="details">
-                    <a href="#" class="title-link">Staatspreis NRW</a>
-                    <span>Award ceremony</span>
                 </div>
             </div>
         </div>
@@ -240,18 +236,13 @@
 
         <div id="biography" class="content-section">
             <h3>Biography</h3>
-            <p style="max-width:700px; text-align:justify;">
-                Born in 1985 in France. Lives and works in Paris.<br><br>
-                <a href="cv.pdf" target="_blank" style="text-decoration: underline;">Download CV (PDF)</a>
-            </p>
+            <p>Born in 1985 in France. Lives and works in Paris.</p>
+            <a href="cv.pdf" target="_blank" style="text-decoration: underline;">Download CV (PDF)</a>
         </div>
 
         <div id="contact" class="content-section">
             <h3>Contact</h3>
-            <p>
-                <strong>Studio Guillaume ROBINET</strong><br>
-                Paris, France
-            </p>
+            <p><strong>Studio Guillaume ROBINET</strong><br>Paris, France</p>
             <p><a href="mailto:contact@guillaumerobinet.com" style="border-bottom: 1px solid #000;">contact@guillaumerobinet.com</a></p>
         </div>
     </div>
@@ -267,18 +258,9 @@
             setTimeout(function() {
                 const intro = document.getElementById('intro-screen');
                 const main = document.getElementById('main-site');
-                
                 intro.style.opacity = '0'; 
                 main.style.opacity = '1';  
-                
-                setTimeout(() => { 
-                    intro.style.display = 'none';
-                    // Petit scroll forcé de 20 pixels vers le bas pour l'iPhone au chargement
-                    if (window.innerWidth < 600) {
-                        window.scrollBy({ top: 20, behavior: 'smooth' });
-                    }
-                }, 2000);
-
+                setTimeout(() => { intro.style.display = 'none'; }, 2000);
             }, 1388);
         };
 
@@ -287,7 +269,6 @@
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
             const active = document.getElementById(pageId);
             if(active) active.classList.add('active-section');
-            window.scrollTo(0,0);
         }
 
         function goHome() {
@@ -295,13 +276,6 @@
             document.getElementById('home-view').style.display = 'flex';
             const newIndex = Math.floor(Math.random() * homePhotos.length);
             document.getElementById('home-random-img').src = homePhotos[newIndex];
-            
-            // Re-appliquer le petit décalage si retour accueil sur mobile
-            if (window.innerWidth < 600) {
-                setTimeout(() => { window.scrollBy({ top: 20, behavior: 'smooth' }); }, 100);
-            } else {
-                window.scrollTo(0,0);
-            }
         }
     </script>
 </body>
