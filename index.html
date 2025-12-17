@@ -11,7 +11,7 @@
             --text-color: #000000;
             /* Police Verdana (Style Art Contemporain / Brut) */
             --font-main: Verdana, Geneva, Tahoma, sans-serif;
-            /* Taille de police "Zoomée" pour lisibilité optimale */
+            /* Taille de police "Zoomée" */
             --font-size: 14px; 
         }
 
@@ -38,7 +38,7 @@
         
         a:hover { color: #666; }
 
-        /* --- INTRO SPLASH (Image de chargement) --- */
+        /* --- INTRO SPLASH (Image load.jpg) --- */
         #intro-screen {
             position: fixed;
             top: 0;
@@ -50,7 +50,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 2.0s ease-in-out; /* Durée du fondu */
+            transition: opacity 2.0s ease-in-out;
             pointer-events: none;
         }
 
@@ -98,13 +98,12 @@
 
         nav li:hover { color: #000; }
         
-        /* Version Mobile */
         @media (max-width: 600px) {
             nav li { display: block; margin-bottom: 15px; }
             #main-site { padding: 25px; }
         }
 
-        /* --- SECTIONS (Cachées par défaut) --- */
+        /* --- SECTIONS --- */
         .content-section {
             display: none;
             animation: fadeIn 0.6s ease;
@@ -129,7 +128,7 @@
             display: block;
         }
 
-        /* --- MISE EN PAGE DU TEXTE --- */
+        /* --- TEXTES --- */
         h3 {
             font-size: 0.95rem;
             text-transform: uppercase;
@@ -255,33 +254,30 @@
     </div>
 
     <script>
-// --- CONFIGURATION IMAGES ---
+        // --- CONFIGURATION IMAGES ---
         const homePhotos = [
-            "accuil2.jpeg"  
-            // J'ai mis ici l'orthographe et l'extension de ton fichier
+            "accuil2.jpeg"  // <--- TON FICHIER EXACT
         ];
 
         // 1. CHARGEMENT
         window.onload = function() {
-            // NOTE: "load.jpg" est dans le HTML
-
-            // Préparation image accueil
+            // "load.jpg" est géré par le HTML
+            
+            // On prépare l'image d'accueil
             const indexHome = Math.floor(Math.random() * homePhotos.length);
             document.getElementById('home-random-img').src = homePhotos[indexHome];
 
-            // --- TIMING NEUROMARKETING (3488ms) ---
+            // --- TIMING 3488ms ---
             setTimeout(function() {
                 const intro = document.getElementById('intro-screen');
                 const main = document.getElementById('main-site');
                 
-                // Début Fade Out
                 intro.style.opacity = '0'; 
                 main.style.opacity = '1';  
                 
-                // Suppression Intro après animation
                 setTimeout(() => { intro.style.display = 'none'; }, 2000);
 
-            }, 3488); // <--- Temps exact demandé
+            }, 3488);
         };
 
         // 2. NAVIGATION
@@ -299,7 +295,7 @@
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
             document.getElementById('home-view').style.display = 'flex';
             
-            // Nouvelle photo aléatoire
+            // Recharge l'image (utile si tu rajoutes d'autres photos plus tard)
             const newIndex = Math.floor(Math.random() * homePhotos.length);
             document.getElementById('home-random-img').src = homePhotos[newIndex];
             
@@ -308,5 +304,3 @@
     </script>
 </body>
 </html>
-
-
