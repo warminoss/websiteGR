@@ -35,7 +35,7 @@
         
         a:hover { color: #666; }
 
-        /* --- INTRO SPLASH --- */
+        /* --- 1. INTRO SPLASH (Le chargement) --- */
         #intro-screen {
             position: fixed;
             top: 0;
@@ -51,13 +51,26 @@
             pointer-events: none;
         }
 
+        /* COMPORTEMENT IPHONE (MOBILE) : Plein écran */
         #intro-screen img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Remplit tout */
         }
 
-        /* --- CONTENEUR PRINCIPAL --- */
+        /* COMPORTEMENT PC / TABLETTE (ECRAN LARGE) : Image contenue */
+        @media (min-width: 768px) {
+            #intro-screen img {
+                width: auto;
+                height: auto;
+                max-height: 85vh; /* 85% de la hauteur de l'écran max */
+                max-width: 100%;
+                object-fit: contain; /* Garde les proportions */
+                box-shadow: 0 0 30px rgba(0,0,0,0.05); /* Légère ombre élégante */
+            }
+        }
+
+        /* --- 2. CONTENEUR PRINCIPAL --- */
         #main-site {
             opacity: 0;
             transition: opacity 2s ease-in;
@@ -118,7 +131,7 @@
 
         .framed-image {
             max-width: 100%;
-            max-height: 55vh; /* Taille contenue */
+            max-height: 55vh; 
             width: auto;
             height: auto;
             border: 15px solid white; 
@@ -163,7 +176,7 @@
 <body>
 
     <div id="intro-screen">
-        <img id="intro-image" src="load.jpg" alt="Intro" onerror="console.log('Erreur chargement intro')">
+        <img id="intro-image" src="load.jpg" alt="Intro">
     </div>
 
     <div id="main-site">
@@ -182,7 +195,7 @@
         </header>
 
         <div id="home-view">
-            <img id="home-random-img" class="framed-image" src="" alt="Art" onerror="this.style.border='2px solid red'; alert('Erreur: Image 1.jpg introuvable sur le serveur. Verifiez le nom exact sur GitHub.');">
+            <img id="home-random-img" class="framed-image" src="" alt="Art">
         </div>
 
         <div id="news" class="content-section">
@@ -252,14 +265,16 @@
     </div>
 
     <script>
-        // --- CONFIGURATION IMAGES SIMPLIFIÉE ---
+        // --- CONFIGURATION IMAGES ---
         const homePhotos = [
-            "1.jpg"  // NOM SUPER SIMPLE
+            "acceuil1.jpg"  // Assure-toi que c'est bien .jpg et pas .pg
         ];
 
         // 1. CHARGEMENT
         window.onload = function() {
-            // Charge 1.jpg
+            // Load.jpg est géré par le HTML
+            
+            // Charge l'image d'accueil
             const indexHome = Math.floor(Math.random() * homePhotos.length);
             const imgEl = document.getElementById('home-random-img');
             imgEl.src = homePhotos[indexHome];
