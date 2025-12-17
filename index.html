@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guillaume ROBINET</title>
     <style>
-        /* --- STYLE GLOBAL (Minimaliste Gursky) --- */
+        /* --- STYLE GLOBAL : NEUTRE & CHIC --- */
         :root {
             --bg-color: #ffffff;
-            --text-color: #000000;
-            --font-main: 'Courier New', Courier, monospace;
+            --text-color: #1a1a1a; /* Noir très légèrement adouci */
+            /* Police Helvetica Neue ou Arial : Le standard "Galerie d'art" neutre */
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-size-desktop: 15px;
+            --font-size-mobile: 14px;
         }
 
         body, html {
@@ -19,27 +22,32 @@
             font-family: var(--font-main);
             background-color: var(--bg-color);
             color: var(--text-color);
-            overflow-x: hidden;
-            font-size: 14px;
+            font-size: var(--font-size-desktop);
+            font-weight: 300; /* Légèreté pour le style */
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased; /* Rendu net sur iPhone */
         }
 
-        /* Liens par défaut : noir et soulignement au survol */
+        /* --- GESTION DES LIENS --- */
         a {
             color: var(--text-color);
             text-decoration: none;
             cursor: pointer;
+            transition: opacity 0.2s;
         }
+        
+        /* Au survol, on baisse l'opacité (style très mode/luxe) */
         a:hover {
-            text-decoration: underline;
-            background-color: #f0f0f0; /* Petit effet visuel au survol */
+            opacity: 0.6; 
         }
 
-        /* Liens spécifiques pour les titres (plus gras) */
-        .clickable-title {
-            font-weight: bold;
+        /* Les titres cliquables sont en gras pour qu'on sache qu'on peut cliquer */
+        .clickable-link {
+            font-weight: 600; 
             border-bottom: 1px solid transparent;
         }
-        .clickable-title:hover {
+        
+        .clickable-link:hover {
             border-bottom: 1px solid #000;
         }
 
@@ -55,7 +63,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 2.5s ease-in-out;
+            transition: opacity 2.0s ease-in-out;
             pointer-events: none;
         }
 
@@ -67,96 +75,111 @@
 
         /* --- 2. LE SITE PRINCIPAL --- */
         #main-site {
-            opacity: 0;
+            opacity: 0; /* Caché au début */
             transition: opacity 2s ease-in;
-            padding: 20px;
-            max-width: 800px;
+            padding: 40px;
+            max-width: 900px; /* Un peu plus large pour respirer */
             margin: 0 auto;
-            padding-bottom: 100px;
+            padding-bottom: 120px;
         }
 
         /* --- HEADER & MENU --- */
         header {
-            margin-bottom: 40px;
-            padding-top: 20px;
+            margin-bottom: 60px;
+            padding-top: 10px;
         }
 
         h1 {
-            font-size: 1.5rem;
+            font-size: 1.2rem; /* Nom discret */
             text-transform: uppercase;
-            margin-bottom: 20px;
-            font-weight: bold;
-            letter-spacing: 1px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 2px;
             cursor: pointer;
         }
 
         nav ul {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
 
         nav li {
-            margin-bottom: 12px;
             text-transform: uppercase;
             cursor: pointer;
-            border-bottom: 1px solid transparent;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
             display: inline-block;
-            width: 100%;
+            margin-right: 20px; /* Menu horizontal sur Desktop ? */
+        }
+        
+        /* Menu vertical sur mobile pour rester classique */
+        @media (max-width: 600px) {
+            nav li { display: block; margin-right: 0; margin-bottom: 15px; }
+            #main-site { padding: 20px; }
         }
 
         nav li:hover {
-            font-weight: bold;
+            text-decoration: underline;
         }
 
-        /* --- SECTIONS DE CONTENU --- */
+        /* --- SECTIONS --- */
         .content-section {
             display: none;
-            margin-top: 30px;
-            border-top: 1px solid #000;
-            padding-top: 20px;
+            margin-top: 40px;
+            border-top: 1px solid #eaeaea; /* Ligne très fine grise */
+            padding-top: 30px;
+            animation: fadeIn 0.6s ease;
         }
 
         .active-section {
             display: block;
-            animation: fadeIn 0.5s;
         }
 
-        /* --- Styles Listes --- */
+        h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 30px;
+            color: #888; /* Titre de section gris */
+        }
+
+        /* --- CONTENU --- */
         .list-item {
-            display: grid;
-            grid-template-columns: 60px 1fr;
-            margin-bottom: 20px;
-            line-height: 1.4;
+            margin-bottom: 35px;
         }
 
         .year {
+            font-size: 0.85rem;
             font-weight: bold;
+            display: inline-block;
+            min-width: 50px;
+            vertical-align: top;
         }
 
-        .details span {
-            display: block;
+        .details {
+            display: inline-block;
+            max-width: 85%;
+            vertical-align: top;
         }
-
-        .location { font-style: italic; }
         
-        .news-item { margin-bottom: 30px; }
-        .news-date { font-weight: bold; margin-bottom: 5px; display: block; }
+        .details span, .details a {
+            display: block;
+            margin-bottom: 2px;
+        }
 
-        .legal-text {
-            font-size: 0.8rem;
-            line-height: 1.6;
-            text-transform: uppercase;
-            margin-top: 20px;
+        .location { font-style: italic; color: #555; }
+        
+        /* Note spéciale liens externes */
+        .external-link::after {
+            content: " ↗";
+            font-size: 0.7em;
         }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 1.2rem; }
-            .list-item { grid-template-columns: 50px 1fr; }
         }
     </style>
 </head>
@@ -176,7 +199,7 @@
                     <li onclick="showSection('exhibitions')">Exhibitions</li>
                     <li onclick="showSection('monographs')">Monographs</li>
                     <li onclick="showSection('biography')">Biography</li>
-                    <li onclick="showSection('contact')">Contact / Imprint</li>
+                    <li onclick="showSection('contact')">Contact</li>
                 </ul>
             </nav>
         </header>
@@ -184,17 +207,21 @@
         <div id="news" class="content-section">
             <h3>NEWS</h3>
             
-            <div class="news-item">
-                <span class="news-date">MARCH 14 - APRIL 18, 2025</span>
-                <a href="#" class="clickable-title">Inherited Images</a><br>
-                <a href="#">Sprüth Magers New York</a><br>
-                <p>Solo show presenting a selection of well-known photographs set in an intertextual dialogue with Old Masters.</p>
+            <div class="list-item">
+                <div class="year">2025</div>
+                <div class="details">
+                    <a href="https://www.instagram.com" target="_blank" class="clickable-link external-link">Inherited Images (Instagram)</a>
+                    <span class="location">Sprüth Magers New York</span>
+                    <p>Solo show presenting a selection of well-known photographs.</p>
+                </div>
             </div>
 
-            <div class="news-item">
-                <span class="news-date">NOVEMBER 2025</span>
-                <a href="#" class="clickable-title">Staatspreis NRW 2025</a><br>
-                <p>Awarded for the formative influence of photographic art and significance for the cultural landscape.</p>
+            <div class="list-item">
+                <div class="year">2025</div>
+                <div class="details">
+                    <a href="page-prix.html" class="clickable-link">Staatspreis NRW 2025</a>
+                    <span>Award for cultural landscape significance.</span>
+                </div>
             </div>
         </div>
 
@@ -204,126 +231,91 @@
             <div class="list-item">
                 <div class="year">2025</div>
                 <div class="details">
-                    <a href="#" class="clickable-title">Sweeter than Honey</a>
-                    <a href="#" class="location">Pinakothek der Moderne, Munich</a>
-                    <span>Germany</span>
+                    <a href="#" class="clickable-link">Sweeter than Honey</a>
+                    <span class="location">Pinakothek der Moderne, Munich</span>
                 </div>
             </div>
 
             <div class="list-item">
                 <div class="year">2024</div>
                 <div class="details">
-                    <a href="#" class="clickable-title">Viktor&Rolf Fashion Statements</a>
-                    <a href="#" class="location">High Museum of Art, Atlanta</a>
-                    <span>USA</span>
-                </div>
-            </div>
-
-            <div class="list-item">
-                <div class="year">2024</div>
-                <div class="details">
-                    <a href="#" class="clickable-title">Thomas Demand: The Object Lesson</a>
-                    <a href="#" class="location">Art Gallery of NSW, Sydney</a>
-                    <span>Australia</span>
-                </div>
-            </div>
-            
-             <div class="list-item">
-                <div class="year">2018</div>
-                <div class="details">
-                    <a href="#" class="clickable-title">The Rhine. The Biography of a European River</a>
-                    <a href="#" class="location">Bundeskunsthalle, Bonn</a>
-                    <span>Germany</span>
+                    <a href="#" class="clickable-link">Viktor&Rolf Fashion Statements</a>
+                    <span class="location">High Museum of Art, Atlanta</span>
                 </div>
             </div>
         </div>
 
         <div id="monographs" class="content-section">
-            <h3>MONOGRAPHS</h3>
+            <h3>PUBLICATIONS</h3>
 
             <div class="list-item">
                 <div class="year">2023</div>
                 <div class="details">
-                    <a href="#" class="clickable-title">Visual Spaces of Today</a>
-                    <a href="#" class="location">Fondazione MAST, Italy</a>
-                    <a href="#">Exhibition Catalogue - View details</a>
-                </div>
-            </div>
-
-            <div class="list-item">
-                <div class="year">2022</div>
-                <div class="details">
-                    <a href="#" class="clickable-title">Andreas Gursky Retrospective</a>
-                    <a href="#" class="location">Amorepacific Museum of Art, Seoul</a>
-                    <a href="#">Order Online</a>
-                </div>
-            </div>
-
-            <div class="list-item">
-                <div class="year">1998</div>
-                <div class="details">
-                    <a href="#" class="clickable-title">Fotografien 1994-1998</a>
-                    <a href="#" class="location">Kunstmuseum Wolfsburg</a>
-                    <a href="#">Hatje Cantz Publisher - Out of print</a>
+                    <a href="#" class="clickable-link">Visual Spaces of Today</a>
+                    <span class="location">Fondazione MAST, Italy</span>
+                    <a href="#" style="font-size: 0.8em; text-decoration: underline;">Commander le livre</a>
                 </div>
             </div>
         </div>
 
         <div id="biography" class="content-section">
             <h3>BIOGRAPHY</h3>
-            <p style="text-align: justify;">
-                Born in 1985 in France.<br>
-                Lives and works in Paris.<br><br>
-                <a href="#">Download Full CV (PDF)</a><br><br>
-                From 2005 to 2010, he studied at the <a href="#">École Nationale Supérieure</a>. His work focuses on the relationship between structure and chaos in modern society.
+            <p style="max-width: 600px; text-align: justify;">
+                Born in 1985 in France. Lives and works in Paris.<br><br>
+                Guillaume Robinet studied at the École Nationale Supérieure. His work focuses on the relationship between structure and chaos in modern society.<br><br>
+                
+                <a href="cv_guillaumerobinet.pdf" target="_blank" class="clickable-link">Download Full CV (PDF) ↓</a>
             </p>
         </div>
 
         <div id="contact" class="content-section active-section">
-            <h3>IMPRINT & CONTACT</h3>
+            <h3>CONTACT</h3>
             
-            <p><strong>Personally liable:</strong><br>
-            Guillaume ROBINET<br>
-            Represented by: <a href="#">Votre Galerie</a></p>
+            <p><strong>Studio Guillaume ROBINET</strong><br>
+            Paris, France</p>
 
-            <p><strong>Contact:</strong><br>
-            <a href="mailto:contact@guillaumerobinet.com">contact@guillaumerobinet.com</a></p>
+            <p><a href="mailto:contact@guillaumerobinet.com" class="clickable-link">contact@guillaumerobinet.com</a></p>
 
-            <div class="legal-text">
-                <a href="#">DISCLAIMER</a><br>
-                The contents of our pages have been created with the utmost care.<br><br>
-                <a href="#">PRIVACY POLICY</a><br>
-                We take the protection of your data very seriously.
-            </div>
+            <p style="margin-top: 50px; font-size: 0.8em; color: #999;">
+                © 2025 Guillaume Robinet. All rights reserved.<br>
+                <a href="#">Legal Notice</a>
+            </p>
         </div>
 
     </div>
 
     <script>
-        // CONFIGURATION PHOTOS
+        // --- VOS PHOTOS D'INTRO ---
         const myPhotos = [
             "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=2058&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1948&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1500964757637-c85e8a162699?q=80&w=2103&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1948&auto=format&fit=crop"
         ];
 
         window.onload = function() {
+            // Choix photo aléatoire
             const randomIndex = Math.floor(Math.random() * myPhotos.length);
             document.getElementById('random-image').src = myPhotos[randomIndex];
 
+            // Animation fade
             setTimeout(function() {
                 const intro = document.getElementById('intro-screen');
                 const main = document.getElementById('main-site');
                 intro.style.opacity = '0';
                 main.style.opacity = '1';
-                setTimeout(() => { intro.style.display = 'none'; }, 2500);
+                // Supprimer l'intro pour libérer les clics
+                setTimeout(() => { intro.style.display = 'none'; }, 2000);
             }, 1500);
         };
 
         function showSection(sectionId) {
+            // Ferme toutes les sections
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
+            // Ouvre la cible
             const active = document.getElementById(sectionId);
             if(active) active.classList.add('active-section');
+            
+            // Scroll doux vers le haut si on est descendu bas
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
