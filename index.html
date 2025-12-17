@@ -28,7 +28,7 @@
             position: fixed;
         }
 
-        /* --- 1. INTRO SPLASH (CORRECTION IPHONE : NE COUPE PLUS) --- */
+        /* --- 1. INTRO SPLASH (FIX RADICAL ANTI-CROP) --- */
         #intro-screen {
             position: fixed;
             top: 0;
@@ -45,11 +45,14 @@
         }
 
         #intro-screen img {
-            /* L'image prend 95% de l'espace pour ne jamais toucher les bords */
-            width: 95%;
-            height: 95%;
-            /* CONTAIN : L'image diminue au lieu de croper si pas de place */
+            /* On force l'image à rester dans une boîte de 90% du téléphone */
+            max-width: 90vw; 
+            max-height: 90vh;
+            width: auto;
+            height: auto;
+            /* contain = INTERDICTION de couper les bords */
             object-fit: contain; 
+            display: block;
         }
 
         /* --- 2. CONTENEUR PRINCIPAL --- */
@@ -75,7 +78,6 @@
             letter-spacing: 2px;
             cursor: pointer;
             display: inline-block;
-            user-select: none;
         }
 
         nav ul { list-style: none; padding: 0; margin: 0; }
@@ -87,7 +89,6 @@
             font-size: 0.95rem;
             color: #888;
         }
-        nav li:hover { color: #000; }
         
         @media (max-width: 600px) {
             nav li { display: block; margin-bottom: 10px; }
@@ -102,7 +103,7 @@
         }
         .active-section { display: block; }
 
-        /* --- VUE ACCUEIL (CORRECTION IPHONE : NE COUPE PLUS) --- */
+        /* --- VUE ACCUEIL (ANTI-CROP AUSSI) --- */
         #home-view {
             display: flex;
             justify-content: center;
@@ -113,33 +114,15 @@
         }
 
         .framed-image {
-            max-width: 95%;
-            max-height: 60vh; 
+            max-width: 90vw;
+            max-height: 55vh; 
             width: auto;
             height: auto;
-            /* L'image entière reste visible sans être rognée */
             object-fit: contain;
             border: 15px solid white; 
             box-shadow: 0 5px 20px rgba(0,0,0,0.08); 
             display: block;
         }
-
-        /* --- TEXTES --- */
-        h3 {
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-bottom: 30px;
-            letter-spacing: 1px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-        }
-        .list-item {
-            margin-bottom: 30px;
-            display: grid;
-            grid-template-columns: 70px 1fr;
-        }
-        .year { font-weight: bold; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -176,13 +159,31 @@
             <div class="list-item">
                 <div class="year">2025</div>
                 <div class="details">
-                    <a href="#" style="font-weight:bold; border-bottom:1px solid #eee;">Inherited Images</a>
-                    <span>Sprüth Magers New York</span>
-                    <p style="margin:0; font-style:italic; color:#666;">Solo show.</p>
+                    <p>Sprüth Magers New York solo show.</p>
                 </div>
             </div>
         </div>
+        
+        <div id="exhibitions" class="content-section">
+            <h3>EXHIBITIONS</h3>
+            <p>Pinakothek der Moderne, Munich 2025</p>
         </div>
+
+        <div id="monographs" class="content-section">
+            <h3>MONOGRAPHS</h3>
+            <p>Visual Spaces of Today, Fondazione MAST, 2023</p>
+        </div>
+
+        <div id="biography" class="content-section">
+            <h3>BIOGRAPHY</h3>
+            <p>Born 1985 in France. Lives and works in Paris.</p>
+        </div>
+
+        <div id="contact" class="content-section">
+            <h3>CONTACT</h3>
+            <p><a href="mailto:contact@guillaumerobinet.com">contact@guillaumerobinet.com</a></p>
+        </div>
+    </div>
 
     <script>
         const homePhotos = ["acceuil1.jpg", "acceuil2.jpg", "acceuil3.jpg"];
