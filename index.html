@@ -25,7 +25,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- LIENS --- */
         a {
             color: var(--text-color);
             text-decoration: none;
@@ -69,7 +68,6 @@
             min-height: 100vh;
         }
 
-        /* --- HEADER --- */
         header { margin-bottom: 40px; }
 
         h1 {
@@ -101,7 +99,6 @@
             #main-site { padding: 25px; }
         }
 
-        /* --- SECTIONS --- */
         .content-section {
             display: none;
             animation: fadeIn 0.6s ease;
@@ -110,22 +107,20 @@
 
         .active-section { display: block; }
 
-        /* --- VUE ACCUEIL (CORRECTION TAILLE IMAGE) --- */
+        /* --- VUE ACCUEIL --- */
         #home-view {
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Aligné vers le haut pour éviter le scroll */
+            align-items: flex-start;
             margin-top: 2vh;
             width: 100%;
         }
 
         .framed-image {
-            /* C'est ici qu'on règle la taille */
-            max-width: 100%;      /* Ne dépasse pas la largeur du mobile */
-            max-height: 55vh;     /* MAXIMUM 55% de la hauteur de l'écran (plus petit) */
-            width: auto;          /* Garde les proportions */
+            max-width: 100%;
+            max-height: 55vh; /* Taille contenue */
+            width: auto;
             height: auto;
-            
             border: 15px solid white; 
             box-shadow: 0 5px 20px rgba(0,0,0,0.08); 
             display: block;
@@ -168,7 +163,7 @@
 <body>
 
     <div id="intro-screen">
-        <img id="intro-image" src="load.jpg" alt="Intro">
+        <img id="intro-image" src="load.jpg" alt="Intro" onerror="console.log('Erreur chargement intro')">
     </div>
 
     <div id="main-site">
@@ -187,7 +182,7 @@
         </header>
 
         <div id="home-view">
-            <img id="home-random-img" class="framed-image" src="" alt="Art">
+            <img id="home-random-img" class="framed-image" src="" alt="Art" onerror="this.style.border='2px solid red'; alert('Erreur: Image 1.jpg introuvable sur le serveur. Verifiez le nom exact sur GitHub.');">
         </div>
 
         <div id="news" class="content-section">
@@ -257,18 +252,17 @@
     </div>
 
     <script>
-        // --- CONFIGURATION IMAGES ---
+        // --- CONFIGURATION IMAGES SIMPLIFIÉE ---
         const homePhotos = [
-            "accuil2.jpeg"  // Le fichier avec ton orthographe exacte
+            "1.jpg"  // NOM SUPER SIMPLE
         ];
 
         // 1. CHARGEMENT
         window.onload = function() {
-            // Load.jpg est géré par le HTML
-            
-            // Préparation image accueil
+            // Charge 1.jpg
             const indexHome = Math.floor(Math.random() * homePhotos.length);
-            document.getElementById('home-random-img').src = homePhotos[indexHome];
+            const imgEl = document.getElementById('home-random-img');
+            imgEl.src = homePhotos[indexHome];
 
             // --- TIMING 3488ms ---
             setTimeout(function() {
