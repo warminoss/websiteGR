@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guillaume ROBINET</title>
+    <style>
+        /* --- STYLE GLOBAL (Minimaliste Gursky) --- */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --font-main: 'Courier New', Courier, monospace;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            font-size: 14px;
+        }
+
+        /* Liens par défaut : noir et soulignement au survol */
+        a {
+            color: var(--text-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        a:hover {
+            text-decoration: underline;
+            background-color: #f0f0f0; /* Petit effet visuel au survol */
+        }
+
+        /* Liens spécifiques pour les titres (plus gras) */
+        .clickable-title {
+            font-weight: bold;
+            border-bottom: 1px solid transparent;
+        }
+        .clickable-title:hover {
+            border-bottom: 1px solid #000;
+        }
+
+        /* --- 1. INTRO SPLASH SCREEN --- */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 2.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        #intro-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- 2. LE SITE PRINCIPAL --- */
+        #main-site {
+            opacity: 0;
+            transition: opacity 2s ease-in;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 100px;
+        }
+
+        /* --- HEADER & MENU --- */
+        header {
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav li {
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            display: inline-block;
+            width: 100%;
+        }
+
+        nav li:hover {
+            font-weight: bold;
+        }
+
+        /* --- SECTIONS DE CONTENU --- */
+        .content-section {
+            display: none;
+            margin-top: 30px;
+            border-top: 1px solid #000;
+            padding-top: 20px;
+        }
+
+        .active-section {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        /* --- Styles Listes --- */
+        .list-item {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .year {
+            font-weight: bold;
+        }
+
+        .details span {
+            display: block;
+        }
+
+        .location { font-style: italic; }
+        
+        .news-item { margin-bottom: 30px; }
+        .news-date { font-weight: bold; margin-bottom: 5px; display: block; }
+
+        .legal-text {
+            font-size: 0.8rem;
+            line-height: 1.6;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.2rem; }
+            .list-item { grid-template-columns: 50px 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="intro-screen">
+        <img id="random-image" src="" alt="Intro">
+    </div>
+
+    <div id="main-site">
+        <header>
+            <h1 onclick="showSection('home')">GUILLAUME ROBINET</h1>
+            
+            <nav>
+                <ul>
+                    <li onclick="showSection('news')">News</li>
+                    <li onclick="showSection('exhibitions')">Exhibitions</li>
+                    <li onclick="showSection('monographs')">Monographs</li>
+                    <li onclick="showSection('biography')">Biography</li>
+                    <li onclick="showSection('contact')">Contact / Imprint</li>
+                </ul>
+            </nav>
+        </header>
+
+        <div id="news" class="content-section">
+            <h3>NEWS</h3>
+            
+            <div class="news-item">
+                <span class="news-date">MARCH 14 - APRIL 18, 2025</span>
+                <a href="#" class="clickable-title">Inherited Images</a><br>
+                <a href="#">Sprüth Magers New York</a><br>
+                <p>Solo show presenting a selection of well-known photographs set in an intertextual dialogue with Old Masters.</p>
+            </div>
+
+            <div class="news-item">
+                <span class="news-date">NOVEMBER 2025</span>
+                <a href="#" class="clickable-title">Staatspreis NRW 2025</a><br>
+                <p>Awarded for the formative influence of photographic art and significance for the cultural landscape.</p>
+            </div>
+        </div>
+
+        <div id="exhibitions" class="content-section">
+            <h3>GROUP EXHIBITIONS</h3>
+            
+            <div class="list-item">
+                <div class="year">2025</div>
+                <div class="details">
+                    <a href="#" class="clickable-title">Sweeter than Honey</a>
+                    <a href="#" class="location">Pinakothek der Moderne, Munich</a>
+                    <span>Germany</span>
+                </div>
+            </div>
+
+            <div class="list-item">
+                <div class="year">2024</div>
+                <div class="details">
+                    <a href="#" class="clickable-title">Viktor&Rolf Fashion Statements</a>
+                    <a href="#" class="location">High Museum of Art, Atlanta</a>
+                    <span>USA</span>
+                </div>
+            </div>
+
+            <div class="list-item">
+                <div class="year">2024</div>
+                <div class="details">
+                    <a href="#" class="clickable-title">Thomas Demand: The Object Lesson</a>
+                    <a href="#" class="location">Art Gallery of NSW, Sydney</a>
+                    <span>Australia</span>
+                </div>
+            </div>
+            
+             <div class="list-item">
+                <div class="year">2018</div>
+                <div class="details">
+                    <a href="#" class="clickable-title">The Rhine. The Biography of a European River</a>
+                    <a href="#" class="location">Bundeskunsthalle, Bonn</a>
+                    <span>Germany</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="monographs" class="content-section">
+            <h3>MONOGRAPHS</h3>
+
+            <div class="list-item">
+                <div class="year">2023</div>
+                <div class="details">
+                    <a href="#" class="clickable-title">Visual Spaces of Today</a>
+                    <a href="#" class="location">Fondazione MAST, Italy</a>
+                    <a href="#">Exhibition Catalogue - View details</a>
+                </div>
+            </div>
+
+            <div class="list-item">
+                <div class="year">2022</div>
+                <div class="details">
+                    <a href="#" class="clickable-title">Andreas Gursky Retrospective</a>
+                    <a href="#" class="location">Amorepacific Museum of Art, Seoul</a>
+                    <a href="#">Order Online</a>
+                </div>
+            </div>
+
+            <div class="list-item">
+                <div class="year">1998</div>
+                <div class="details">
+                    <a href="#" class="clickable-title">Fotografien 1994-1998</a>
+                    <a href="#" class="location">Kunstmuseum Wolfsburg</a>
+                    <a href="#">Hatje Cantz Publisher - Out of print</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="biography" class="content-section">
+            <h3>BIOGRAPHY</h3>
+            <p style="text-align: justify;">
+                Born in 1985 in France.<br>
+                Lives and works in Paris.<br><br>
+                <a href="#">Download Full CV (PDF)</a><br><br>
+                From 2005 to 2010, he studied at the <a href="#">École Nationale Supérieure</a>. His work focuses on the relationship between structure and chaos in modern society.
+            </p>
+        </div>
+
+        <div id="contact" class="content-section active-section">
+            <h3>IMPRINT & CONTACT</h3>
+            
+            <p><strong>Personally liable:</strong><br>
+            Guillaume ROBINET<br>
+            Represented by: <a href="#">Votre Galerie</a></p>
+
+            <p><strong>Contact:</strong><br>
+            <a href="mailto:contact@guillaumerobinet.com">contact@guillaumerobinet.com</a></p>
+
+            <div class="legal-text">
+                <a href="#">DISCLAIMER</a><br>
+                The contents of our pages have been created with the utmost care.<br><br>
+                <a href="#">PRIVACY POLICY</a><br>
+                We take the protection of your data very seriously.
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // CONFIGURATION PHOTOS
+        const myPhotos = [
+            "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=2058&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1948&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1500964757637-c85e8a162699?q=80&w=2103&auto=format&fit=crop"
+        ];
+
+        window.onload = function() {
+            const randomIndex = Math.floor(Math.random() * myPhotos.length);
+            document.getElementById('random-image').src = myPhotos[randomIndex];
+
+            setTimeout(function() {
+                const intro = document.getElementById('intro-screen');
+                const main = document.getElementById('main-site');
+                intro.style.opacity = '0';
+                main.style.opacity = '1';
+                setTimeout(() => { intro.style.display = 'none'; }, 2500);
+            }, 1500);
+        };
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
+            const active = document.getElementById(sectionId);
+            if(active) active.classList.add('active-section');
+        }
+    </script>
+</body>
+</html>
