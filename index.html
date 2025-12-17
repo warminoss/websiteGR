@@ -35,7 +35,7 @@
         
         a:hover { color: #666; }
 
-        /* --- 1. INTRO SPLASH (Le chargement) --- */
+        /* --- 1. INTRO SPLASH --- */
         #intro-screen {
             position: fixed;
             top: 0;
@@ -51,22 +51,20 @@
             pointer-events: none;
         }
 
-        /* COMPORTEMENT IPHONE (MOBILE) : Plein écran */
         #intro-screen img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Remplit tout */
+            object-fit: cover;
         }
 
-        /* COMPORTEMENT PC / TABLETTE (ECRAN LARGE) : Image contenue */
         @media (min-width: 768px) {
             #intro-screen img {
                 width: auto;
                 height: auto;
-                max-height: 85vh; /* 85% de la hauteur de l'écran max */
+                max-height: 85vh;
                 max-width: 100%;
-                object-fit: contain; /* Garde les proportions */
-                box-shadow: 0 0 30px rgba(0,0,0,0.05); /* Légère ombre élégante */
+                object-fit: contain;
+                box-shadow: 0 0 30px rgba(0,0,0,0.05);
             }
         }
 
@@ -120,18 +118,20 @@
 
         .active-section { display: block; }
 
-        /* --- VUE ACCUEIL --- */
+        /* --- VUE ACCUEIL AJUSTÉE POUR IPHONE --- */
         #home-view {
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            margin-top: 2vh;
+            flex-direction: column;
+            align-items: center;
+            /* L'astuce est ici : on pousse l'image vers le haut tout en laissant de l'espace en bas */
+            padding-top: 5vh; 
+            padding-bottom: 15vh; /* Espace de sécurité en bas pour éviter d'être collé au bord du tel */
             width: 100%;
         }
 
         .framed-image {
             max-width: 100%;
-            max-height: 55vh; 
+            max-height: 50vh; /* Légèrement réduit pour laisser de l'espace */
             width: auto;
             height: auto;
             border: 15px solid white; 
@@ -182,7 +182,6 @@
     <div id="main-site">
         <header>
             <h1 onclick="goHome()">GUILLAUME ROBINET</h1>
-            
             <nav>
                 <ul>
                     <li onclick="showPage('news')">News</li>
@@ -226,13 +225,6 @@
                     <span>Pinakothek der Moderne, Munich</span>
                 </div>
             </div>
-            <div class="list-item">
-                <div class="year">2024</div>
-                <div class="details">
-                    <a href="#" class="title-link">Fashion Statements</a>
-                    <span>High Museum of Art, Atlanta</span>
-                </div>
-            </div>
         </div>
 
         <div id="monographs" class="content-section">
@@ -265,21 +257,13 @@
     </div>
 
     <script>
-        // --- CONFIGURATION IMAGES ---
-        const homePhotos = [
-            "acceuil1.jpg"  // Assure-toi que c'est bien .jpg et pas .pg
-        ];
+        const homePhotos = ["acceuil1.jpg"];
 
-        // 1. CHARGEMENT
         window.onload = function() {
-            // Load.jpg est géré par le HTML
-            
-            // Charge l'image d'accueil
             const indexHome = Math.floor(Math.random() * homePhotos.length);
             const imgEl = document.getElementById('home-random-img');
             imgEl.src = homePhotos[indexHome];
 
-            // --- TIMING 1388ms ---
             setTimeout(function() {
                 const intro = document.getElementById('intro-screen');
                 const main = document.getElementById('main-site');
@@ -287,34 +271,38 @@
                 intro.style.opacity = '0'; 
                 main.style.opacity = '1';  
                 
-                setTimeout(() => { intro.style.display = 'none'; }, 2000);
+                setTimeout(() => { 
+                    intro.style.display = 'none';
+                    // Petit scroll forcé de 20 pixels vers le bas pour l'iPhone au chargement
+                    if (window.innerWidth < 600) {
+                        window.scrollBy({ top: 20, behavior: 'smooth' });
+                    }
+                }, 2000);
 
             }, 1388);
         };
 
-        // 2. NAVIGATION
         function showPage(pageId) {
             document.getElementById('home-view').style.display = 'none';
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
-            
             const active = document.getElementById(pageId);
             if(active) active.classList.add('active-section');
             window.scrollTo(0,0);
         }
 
-        // 3. RETOUR ACCUEIL
         function goHome() {
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
             document.getElementById('home-view').style.display = 'flex';
-            
             const newIndex = Math.floor(Math.random() * homePhotos.length);
             document.getElementById('home-random-img').src = homePhotos[newIndex];
             
-            window.scrollTo(0,0);
+            // Re-appliquer le petit décalage si retour accueil sur mobile
+            if (window.innerWidth < 600) {
+                setTimeout(() => { window.scrollBy({ top: 20, behavior: 'smooth' }); }, 100);
+            } else {
+                window.scrollTo(0,0);
+            }
         }
     </script>
 </body>
 </html>
-
-
-
