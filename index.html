@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guillaume ROBINET</title>
+    <title>GUILLAUME ROBINET</title>
     <style>
-        /* --- STYLE GLOBAL : NEUTRE & CHIC --- */
+        /* --- DIRECTION ARTISTIQUE : STYLE "ARCHIVE / TYPO" --- */
         :root {
             --bg-color: #ffffff;
-            --text-color: #1a1a1a; /* Noir très légèrement adouci */
-            /* Police Helvetica Neue ou Arial : Le standard "Galerie d'art" neutre */
-            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            --font-size-desktop: 15px;
-            --font-size-mobile: 14px;
+            --text-color: #000000;
+            /* Police Monospace élégante (Menlo sur Mac, Consolas sur Windows) */
+            --font-main: 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+            --font-size: 13px; /* Petit et précis */
         }
 
         body, html {
@@ -22,10 +21,9 @@
             font-family: var(--font-main);
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-size: var(--font-size-desktop);
-            font-weight: 300; /* Légèreté pour le style */
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased; /* Rendu net sur iPhone */
+            font-size: var(--font-size);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* --- GESTION DES LIENS --- */
@@ -33,22 +31,12 @@
             color: var(--text-color);
             text-decoration: none;
             cursor: pointer;
-            transition: opacity 0.2s;
-        }
-        
-        /* Au survol, on baisse l'opacité (style très mode/luxe) */
-        a:hover {
-            opacity: 0.6; 
-        }
-
-        /* Les titres cliquables sont en gras pour qu'on sache qu'on peut cliquer */
-        .clickable-link {
-            font-weight: 600; 
             border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
         }
         
-        .clickable-link:hover {
-            border-bottom: 1px solid #000;
+        a:hover {
+            border-bottom: 1px solid #000; /* Soulignement fin au survol */
         }
 
         /* --- 1. INTRO SPLASH SCREEN --- */
@@ -63,7 +51,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 2.0s ease-in-out;
+            transition: opacity 2.5s ease-in-out;
             pointer-events: none;
         }
 
@@ -73,29 +61,33 @@
             object-fit: cover;
         }
 
-        /* --- 2. LE SITE PRINCIPAL --- */
+        /* --- 2. STRUCTURE PRINCIPALE --- */
         #main-site {
             opacity: 0; /* Caché au début */
             transition: opacity 2s ease-in;
-            padding: 40px;
-            max-width: 900px; /* Un peu plus large pour respirer */
+            padding: 30px;
+            max-width: 900px;
             margin: 0 auto;
-            padding-bottom: 120px;
+            padding-bottom: 100px;
         }
 
-        /* --- HEADER & MENU --- */
+        /* --- HEADER (NOM + MENU) --- */
         header {
-            margin-bottom: 60px;
-            padding-top: 10px;
+            margin-bottom: 50px;
         }
 
         h1 {
-            font-size: 1.2rem; /* Nom discret */
+            font-size: 1.1rem;
             text-transform: uppercase;
-            margin-bottom: 30px;
-            font-weight: 700;
-            letter-spacing: 2px;
+            margin-bottom: 25px;
+            font-weight: normal; /* Pas de gras pour le style typo */
+            letter-spacing: 1px;
             cursor: pointer;
+            display: inline-block;
+        }
+
+        nav {
+            margin-top: 10px;
         }
 
         nav ul {
@@ -107,78 +99,85 @@
         nav li {
             text-transform: uppercase;
             cursor: pointer;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+            margin-right: 25px;
             display: inline-block;
-            margin-right: 20px; /* Menu horizontal sur Desktop ? */
-        }
-        
-        /* Menu vertical sur mobile pour rester classique */
-        @media (max-width: 600px) {
-            nav li { display: block; margin-right: 0; margin-bottom: 15px; }
-            #main-site { padding: 20px; }
+            font-size: 0.85rem;
+            color: #666;
+            transition: color 0.3s;
         }
 
         nav li:hover {
-            text-decoration: underline;
+            color: #000;
+        }
+        
+        /* Mobile : Menu en liste verticale */
+        @media (max-width: 600px) {
+            nav li { display: block; margin-bottom: 10px; }
+            #main-site { padding: 20px; }
         }
 
-        /* --- SECTIONS --- */
+        /* --- CONTENU --- */
         .content-section {
-            display: none;
-            margin-top: 40px;
-            border-top: 1px solid #eaeaea; /* Ligne très fine grise */
-            padding-top: 30px;
-            animation: fadeIn 0.6s ease;
+            display: none; /* Tout est caché par défaut */
+            animation: fadeIn 0.8s ease;
         }
 
         .active-section {
             display: block;
         }
 
-        h3 {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 30px;
-            color: #888; /* Titre de section gris */
+        /* --- STYLE DE L'IMAGE D'ACCUEIL (CADRE BLANC) --- */
+        #home-art {
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; /* Aligné à gauche comme le texte */
         }
 
-        /* --- CONTENU --- */
+        .framed-image {
+            max-width: 100%;
+            max-height: 70vh; /* Ne dépasse pas l'écran */
+            border: 15px solid white; /* Le fameux bord blanc */
+            box-shadow: 0 0 1px rgba(0,0,0,0.2); /* Très légère ombre pour détacher le blanc du blanc */
+            display: block;
+        }
+
+        /* --- TEXTES & LISTES --- */
+        h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: normal;
+            margin-bottom: 40px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            letter-spacing: 1px;
+        }
+
         .list-item {
-            margin-bottom: 35px;
+            margin-bottom: 40px;
+            display: grid;
+            grid-template-columns: 80px 1fr;
         }
 
         .year {
-            font-size: 0.85rem;
-            font-weight: bold;
-            display: inline-block;
-            min-width: 50px;
-            vertical-align: top;
+            font-weight: normal;
+            color: #999;
         }
 
-        .details {
-            display: inline-block;
-            max-width: 85%;
-            vertical-align: top;
-        }
-        
-        .details span, .details a {
+        .details span {
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
         }
 
-        .location { font-style: italic; color: #555; }
-        
-        /* Note spéciale liens externes */
-        .external-link::after {
-            content: " ↗";
-            font-size: 0.7em;
+        .title-link {
+            color: #000;
+            border-bottom: 1px solid #000; /* Souligné par défaut style lien */
+            display: inline-block;
+            margin-bottom: 5px;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -186,12 +185,12 @@
 <body>
 
     <div id="intro-screen">
-        <img id="random-image" src="" alt="Intro">
+        <img id="intro-image" src="" alt="Intro">
     </div>
 
     <div id="main-site">
         <header>
-            <h1 onclick="showSection('home')">GUILLAUME ROBINET</h1>
+            <h1 onclick="showSection('home-art')">GUILLAUME ROBINET</h1>
             
             <nav>
                 <ul>
@@ -204,118 +203,133 @@
             </nav>
         </header>
 
+        <div id="home-art" class="content-section active-section">
+            <img id="home-random-img" class="framed-image" src="" alt="Art">
+        </div>
+
         <div id="news" class="content-section">
             <h3>NEWS</h3>
-            
             <div class="list-item">
                 <div class="year">2025</div>
                 <div class="details">
-                    <a href="https://www.instagram.com" target="_blank" class="clickable-link external-link">Inherited Images (Instagram)</a>
-                    <span class="location">Sprüth Magers New York</span>
-                    <p>Solo show presenting a selection of well-known photographs.</p>
-                </div>
-            </div>
-
-            <div class="list-item">
-                <div class="year">2025</div>
-                <div class="details">
-                    <a href="page-prix.html" class="clickable-link">Staatspreis NRW 2025</a>
-                    <span>Award for cultural landscape significance.</span>
+                    <a href="https://instagram.com" target="_blank" class="title-link">Inherited Images</a>
+                    <span>Sprüth Magers New York</span>
+                    <br>
+                    <p style="margin:0; font-style:italic;">Solo show presenting a selection of well-known photographs.</p>
                 </div>
             </div>
         </div>
 
         <div id="exhibitions" class="content-section">
-            <h3>GROUP EXHIBITIONS</h3>
-            
+            <h3>Exhibitions</h3>
             <div class="list-item">
                 <div class="year">2025</div>
                 <div class="details">
-                    <a href="#" class="clickable-link">Sweeter than Honey</a>
-                    <span class="location">Pinakothek der Moderne, Munich</span>
+                    <a href="#" class="title-link">Sweeter than Honey</a>
+                    <span>Pinakothek der Moderne, Munich</span>
                 </div>
             </div>
-
             <div class="list-item">
                 <div class="year">2024</div>
                 <div class="details">
-                    <a href="#" class="clickable-link">Viktor&Rolf Fashion Statements</a>
-                    <span class="location">High Museum of Art, Atlanta</span>
+                    <a href="#" class="title-link">Fashion Statements</a>
+                    <span>High Museum of Art, Atlanta</span>
                 </div>
             </div>
         </div>
 
         <div id="monographs" class="content-section">
-            <h3>PUBLICATIONS</h3>
-
+            <h3>Publications</h3>
             <div class="list-item">
                 <div class="year">2023</div>
                 <div class="details">
-                    <a href="#" class="clickable-link">Visual Spaces of Today</a>
-                    <span class="location">Fondazione MAST, Italy</span>
-                    <a href="#" style="font-size: 0.8em; text-decoration: underline;">Commander le livre</a>
+                    <a href="#" class="title-link">Visual Spaces of Today</a>
+                    <span>Fondazione MAST, Italy</span>
                 </div>
             </div>
         </div>
 
         <div id="biography" class="content-section">
-            <h3>BIOGRAPHY</h3>
-            <p style="max-width: 600px; text-align: justify;">
-                Born in 1985 in France. Lives and works in Paris.<br><br>
-                Guillaume Robinet studied at the École Nationale Supérieure. His work focuses on the relationship between structure and chaos in modern society.<br><br>
-                
-                <a href="cv_guillaumerobinet.pdf" target="_blank" class="clickable-link">Download Full CV (PDF) ↓</a>
+            <h3>Biography</h3>
+            <p style="max-width:600px; text-align:justify;">
+                Born in 1985 in France.<br>
+                Lives and works in Paris.<br><br>
+                <a href="cv.pdf" target="_blank" class="title-link">Download CV</a>
             </p>
         </div>
 
-        <div id="contact" class="content-section active-section">
-            <h3>CONTACT</h3>
-            
-            <p><strong>Studio Guillaume ROBINET</strong><br>
-            Paris, France</p>
-
-            <p><a href="mailto:contact@guillaumerobinet.com" class="clickable-link">contact@guillaumerobinet.com</a></p>
-
-            <p style="margin-top: 50px; font-size: 0.8em; color: #999;">
-                © 2025 Guillaume Robinet. All rights reserved.<br>
-                <a href="#">Legal Notice</a>
+        <div id="contact" class="content-section">
+            <h3>Contact</h3>
+            <p>
+                <strong>Studio Guillaume ROBINET</strong><br>
+                <a href="mailto:contact@guillaumerobinet.com">contact@guillaumerobinet.com</a>
+            </p>
+            <br>
+            <p style="font-size: 0.9em; color:#999;">
+                Represented by <a href="#" style="text-decoration:underline;">Galerie X</a>
             </p>
         </div>
 
     </div>
 
     <script>
-        // --- VOS PHOTOS D'INTRO ---
+        // --- CONFIGURATION ---
         const myPhotos = [
             "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=2058&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1948&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1948&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1500964757637-c85e8a162699?q=80&w=2103&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&w=2000&auto=format&fit=crop"
         ];
 
         window.onload = function() {
-            // Choix photo aléatoire
-            const randomIndex = Math.floor(Math.random() * myPhotos.length);
-            document.getElementById('random-image').src = myPhotos[randomIndex];
+            // 1. Image Intro (Plein écran)
+            const indexIntro = Math.floor(Math.random() * myPhotos.length);
+            document.getElementById('intro-image').src = myPhotos[indexIntro];
 
-            // Animation fade
+            // 2. Image Home (Celle avec le cadre blanc)
+            // On prend une image aléatoire (potentiellement différente de l'intro)
+            const indexHome = Math.floor(Math.random() * myPhotos.length);
+            document.getElementById('home-random-img').src = myPhotos[indexHome];
+
+            // 3. Animation Fade
             setTimeout(function() {
                 const intro = document.getElementById('intro-screen');
                 const main = document.getElementById('main-site');
-                intro.style.opacity = '0';
-                main.style.opacity = '1';
-                // Supprimer l'intro pour libérer les clics
-                setTimeout(() => { intro.style.display = 'none'; }, 2000);
+                
+                intro.style.opacity = '0'; // Disparition intro
+                main.style.opacity = '1';  // Apparition site
+                
+                // Retirer l'intro du DOM pour cliquer dessous
+                setTimeout(() => { intro.style.display = 'none'; }, 2500);
             }, 1500);
         };
 
+        // Fonction de Navigation
         function showSection(sectionId) {
-            // Ferme toutes les sections
-            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
-            // Ouvre la cible
+            // Cacher toutes les sections
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.classList.remove('active-section');
+                // Petit hack pour re-déclencher l'animation fade à chaque fois si voulu
+                // sec.style.animation = 'none';
+                // sec.offsetHeight; /* trigger reflow */
+                // sec.style.animation = null; 
+            });
+
+            // Si on clique sur le Nom, on veut peut-être changer l'image aléatoire ?
+            // (Optionnel : décommentez la ligne ci-dessous pour changer d'image à chaque retour Home)
+            // if(sectionId === 'home-art') { refreshHomeImage(); }
+
+            // Afficher la section demandée
             const active = document.getElementById(sectionId);
             if(active) active.classList.add('active-section');
             
-            // Scroll doux vers le haut si on est descendu bas
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Remonter en haut de page
+            window.scrollTo(0,0);
+        }
+
+        function refreshHomeImage() {
+            const index = Math.floor(Math.random() * myPhotos.length);
+            document.getElementById('home-random-img').src = myPhotos[index];
         }
     </script>
 </body>
