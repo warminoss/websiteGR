@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GUILLAUME ROBINET</title>
     <style>
-        /* --- DIRECTION ARTISTIQUE : STYLE "GALERIE DIGITALE" --- */
+        /* --- DIRECTION ARTISTIQUE --- */
         :root {
             --bg-color: #ffffff;
             --text-color: #000000;
-            /* Verdana : Large, aérée, très "art contemporain brut" */
+            /* Police Verdana conservée */
             --font-main: Verdana, Geneva, Tahoma, sans-serif;
-            --font-size: 11px; /* Petit pour le style sophistiqué */
+            /* ZOOM : Passé de 11px à 14px (taille standard lisible) */
+            --font-size: 14px; 
         }
 
         body, html {
@@ -22,8 +23,8 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: var(--font-size);
-            line-height: 1.8;
-            letter-spacing: 0.5px;
+            line-height: 1.6; /* Un peu plus serré pour garder l'élégance avec la grande police */
+            letter-spacing: 0.2px;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -37,7 +38,7 @@
         }
         
         a:hover {
-            color: #666; /* Devient gris au survol */
+            color: #666;
         }
 
         /* --- 1. INTRO SPLASH SCREEN --- */
@@ -66,8 +67,8 @@
         #main-site {
             opacity: 0;
             transition: opacity 2s ease-in;
-            padding: 40px;
-            max-width: 900px;
+            padding: 50px; /* Un peu plus de marge */
+            max-width: 960px;
             margin: 0 auto;
             position: relative;
             min-height: 100vh;
@@ -75,14 +76,13 @@
 
         /* --- HEADER (NOM + MENU) --- */
         header {
-            margin-bottom: 60px;
-            /* Le header reste fixe ou bouge ? Ici il bouge avec le scroll */
+            margin-bottom: 70px;
         }
 
         h1 {
-            font-size: 1.2rem;
+            font-size: 1.4rem; /* Augmenté proportionnellement */
             text-transform: uppercase;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             font-weight: normal;
             letter-spacing: 2px;
             cursor: pointer;
@@ -98,9 +98,9 @@
         nav li {
             text-transform: uppercase;
             cursor: pointer;
-            margin-right: 30px;
+            margin-right: 35px; /* Espacement augmenté */
             display: inline-block;
-            font-size: 0.8rem;
+            font-size: 0.95rem; /* Menu plus lisible */
             color: #888;
         }
 
@@ -108,18 +108,18 @@
             color: #000;
         }
         
-        /* Mobile : Menu vertical */
+        /* Mobile */
         @media (max-width: 600px) {
-            nav li { display: block; margin-bottom: 10px; }
-            #main-site { padding: 20px; }
-            h1 { font-size: 1rem; }
+            nav li { display: block; margin-bottom: 15px; font-size: 1rem; }
+            #main-site { padding: 25px; }
+            h1 { font-size: 1.2rem; }
         }
 
         /* --- CONTENU --- */
         .content-section {
-            display: none; /* Caché par défaut */
+            display: none;
             animation: fadeIn 0.6s ease;
-            padding-bottom: 100px;
+            padding-bottom: 120px;
         }
 
         .active-section {
@@ -131,25 +131,23 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 5vh; /* Espace depuis le menu */
+            margin-top: 5vh;
         }
 
         .framed-image {
-            max-width: 80%; /* Taille max de la photo */
-            max-height: 60vh;
-            border: 20px solid white; /* Cadre blanc */
-            /* Ombre légère pour détacher le cadre blanc du fond blanc */
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08); 
+            max-width: 80%;
+            max-height: 65vh;
+            border: 20px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
             display: block;
-            transition: transform 0.5s ease;
         }
 
-        /* --- TEXTES & LISTES (News, Expos...) --- */
+        /* --- LISTES (News, Expos...) --- */
         h3 {
-            font-size: 0.8rem;
+            font-size: 0.95rem; /* Un peu plus grand */
             text-transform: uppercase;
             font-weight: bold;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             letter-spacing: 1px;
             border-bottom: 1px solid #eee;
             padding-bottom: 15px;
@@ -157,9 +155,9 @@
         }
 
         .list-item {
-            margin-bottom: 40px;
+            margin-bottom: 45px;
             display: grid;
-            grid-template-columns: 60px 1fr;
+            grid-template-columns: 70px 1fr; /* Colonne année ajustée */
         }
 
         .year {
@@ -218,7 +216,6 @@
                     <p style="margin:0; font-style:italic; color:#666;">Solo show presenting a selection of well-known photographs.</p>
                 </div>
             </div>
-            
              <div class="list-item">
                 <div class="year">2025</div>
                 <div class="details">
@@ -259,7 +256,7 @@
 
         <div id="biography" class="content-section">
             <h3>Biography</h3>
-            <p style="max-width:600px; text-align:justify;">
+            <p style="max-width:700px; text-align:justify;">
                 Born in 1985 in France.<br>
                 Lives and works in Paris.<br><br>
                 <a href="cv.pdf" target="_blank" style="text-decoration: underline;">Download CV (PDF)</a>
@@ -276,7 +273,7 @@
                 <a href="mailto:contact@guillaumerobinet.com" style="border-bottom: 1px solid #000;">contact@guillaumerobinet.com</a>
             </p>
             <br><br>
-            <p style="font-size: 0.9em; color:#999;">
+            <p style="font-size: 0.8em; color:#999;">
                 DISCLAIMER<br>
                 All rights reserved. © 2025
             </p>
@@ -285,8 +282,7 @@
     </div>
 
     <script>
-        // --- PHOTOS ---
-        // Ajoutez vos photos ici
+        // --- VOS PHOTOS ---
         const myPhotos = [
             "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=2058&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1948&auto=format&fit=crop",
@@ -295,15 +291,12 @@
         ];
 
         window.onload = function() {
-            // 1. Intro Image
             const indexIntro = Math.floor(Math.random() * myPhotos.length);
             document.getElementById('intro-image').src = myPhotos[indexIntro];
 
-            // 2. Home Image (Celle encadrée)
             const indexHome = Math.floor(Math.random() * myPhotos.length);
             document.getElementById('home-random-img').src = myPhotos[indexHome];
 
-            // 3. Animation Fade
             setTimeout(function() {
                 const intro = document.getElementById('intro-screen');
                 const main = document.getElementById('main-site');
@@ -313,40 +306,21 @@
             }, 1500);
         };
 
-        // --- NAVIGATION LOGIQUE ---
-        
-        // Fonction pour afficher une page (News, Bio...)
         function showPage(pageId) {
-            // 1. Cacher l'image d'accueil
             document.getElementById('home-view').style.display = 'none';
-
-            // 2. Cacher toutes les sections de texte
             document.querySelectorAll('.content-section').forEach(sec => {
                 sec.classList.remove('active-section');
             });
-
-            // 3. Afficher la section demandée
             const active = document.getElementById(pageId);
-            if(active) {
-                active.classList.add('active-section');
-            }
+            if(active) active.classList.add('active-section');
             window.scrollTo(0,0);
         }
 
-        // Fonction retour Accueil (Image seule)
         function goHome() {
-            // 1. Cacher toutes les sections de texte
             document.querySelectorAll('.content-section').forEach(sec => {
                 sec.classList.remove('active-section');
             });
-
-            // 2. Ré-afficher l'image d'accueil
             document.getElementById('home-view').style.display = 'flex';
-            
-            // Optionnel : Changer l'image à chaque retour à l'accueil ?
-            // const index = Math.floor(Math.random() * myPhotos.length);
-            // document.getElementById('home-random-img').src = myPhotos[index];
-            
             window.scrollTo(0,0);
         }
     </script>
