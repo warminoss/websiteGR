@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GUILLAUME ROBINET</title>
     <style>
-        /* --- DIRECTION ARTISTIQUE --- */
+        /* --- STYLE GENERAL --- */
         :root {
             --bg-color: #ffffff;
             --text-color: #000000;
-            /* Police Verdana conservée */
             --font-main: Verdana, Geneva, Tahoma, sans-serif;
-            /* ZOOM : Passé de 11px à 14px (taille standard lisible) */
-            --font-size: 14px; 
+            --font-size: 14px; /* Taille "Zoomée" lisible */
         }
 
         body, html {
@@ -23,12 +21,11 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: var(--font-size);
-            line-height: 1.6; /* Un peu plus serré pour garder l'élégance avec la grande police */
-            letter-spacing: 0.2px;
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- LIENS --- */
+        /* --- NAVIGATION --- */
         a {
             color: var(--text-color);
             text-decoration: none;
@@ -37,11 +34,9 @@
             transition: all 0.3s ease;
         }
         
-        a:hover {
-            color: #666;
-        }
+        a:hover { color: #666; }
 
-        /* --- 1. INTRO SPLASH SCREEN --- */
+        /* --- INTRO SPLASH --- */
         #intro-screen {
             position: fixed;
             top: 0;
@@ -63,70 +58,58 @@
             object-fit: cover;
         }
 
-        /* --- 2. STRUCTURE PRINCIPALE --- */
+        /* --- SITE PRINCIPAL --- */
         #main-site {
             opacity: 0;
             transition: opacity 2s ease-in;
-            padding: 50px; /* Un peu plus de marge */
+            padding: 50px;
             max-width: 960px;
             margin: 0 auto;
             position: relative;
             min-height: 100vh;
         }
 
-        /* --- HEADER (NOM + MENU) --- */
-        header {
-            margin-bottom: 70px;
-        }
+        header { margin-bottom: 70px; }
 
         h1 {
-            font-size: 1.4rem; /* Augmenté proportionnellement */
+            font-size: 1.4rem;
             text-transform: uppercase;
             margin-bottom: 35px;
             font-weight: normal;
             letter-spacing: 2px;
             cursor: pointer;
             display: inline-block;
+            user-select: none; /* Evite de sélectionner le texte en cliquant vite */
         }
 
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+        nav ul { list-style: none; padding: 0; margin: 0; }
 
         nav li {
             text-transform: uppercase;
             cursor: pointer;
-            margin-right: 35px; /* Espacement augmenté */
+            margin-right: 35px;
             display: inline-block;
-            font-size: 0.95rem; /* Menu plus lisible */
+            font-size: 0.95rem;
             color: #888;
         }
 
-        nav li:hover {
-            color: #000;
-        }
+        nav li:hover { color: #000; }
         
-        /* Mobile */
         @media (max-width: 600px) {
-            nav li { display: block; margin-bottom: 15px; font-size: 1rem; }
+            nav li { display: block; margin-bottom: 15px; }
             #main-site { padding: 25px; }
-            h1 { font-size: 1.2rem; }
         }
 
-        /* --- CONTENU --- */
+        /* --- ZONES DE CONTENU --- */
         .content-section {
             display: none;
             animation: fadeIn 0.6s ease;
             padding-bottom: 120px;
         }
 
-        .active-section {
-            display: block;
-        }
+        .active-section { display: block; }
 
-        /* --- ACCUEIL SPECIAL (PHOTO CENTRÉE) --- */
+        /* --- VUE ACCUEIL (PHOTO CADRÉE) --- */
         #home-view {
             display: flex;
             justify-content: center;
@@ -142,9 +125,9 @@
             display: block;
         }
 
-        /* --- LISTES (News, Expos...) --- */
+        /* --- CONTENU TEXTE --- */
         h3 {
-            font-size: 0.95rem; /* Un peu plus grand */
+            font-size: 0.95rem;
             text-transform: uppercase;
             font-weight: bold;
             margin-bottom: 50px;
@@ -157,12 +140,10 @@
         .list-item {
             margin-bottom: 45px;
             display: grid;
-            grid-template-columns: 70px 1fr; /* Colonne année ajustée */
+            grid-template-columns: 70px 1fr;
         }
 
-        .year {
-            font-weight: bold;
-        }
+        .year { font-weight: bold; }
 
         .title-link {
             font-weight: bold;
@@ -170,9 +151,7 @@
             padding-bottom: 2px;
         }
 
-        .title-link:hover {
-            border-bottom: 1px solid #000;
-        }
+        .title-link:hover { border-bottom: 1px solid #000; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -212,15 +191,7 @@
                 <div class="details">
                     <a href="#" class="title-link">Inherited Images</a>
                     <span>Sprüth Magers New York</span>
-                    <br>
-                    <p style="margin:0; font-style:italic; color:#666;">Solo show presenting a selection of well-known photographs.</p>
-                </div>
-            </div>
-             <div class="list-item">
-                <div class="year">2025</div>
-                <div class="details">
-                    <a href="#" class="title-link">Staatspreis NRW</a>
-                    <span>Award ceremony</span>
+                    <p style="margin:0; font-style:italic; color:#666;">Solo show.</p>
                 </div>
             </div>
         </div>
@@ -257,8 +228,7 @@
         <div id="biography" class="content-section">
             <h3>Biography</h3>
             <p style="max-width:700px; text-align:justify;">
-                Born in 1985 in France.<br>
-                Lives and works in Paris.<br><br>
+                Born in 1985 in France. Lives and works in Paris.<br><br>
                 <a href="cv.pdf" target="_blank" style="text-decoration: underline;">Download CV (PDF)</a>
             </p>
         </div>
@@ -269,16 +239,8 @@
                 <strong>Studio Guillaume ROBINET</strong><br>
                 Paris, France
             </p>
-            <p>
-                <a href="mailto:contact@guillaumerobinet.com" style="border-bottom: 1px solid #000;">contact@guillaumerobinet.com</a>
-            </p>
-            <br><br>
-            <p style="font-size: 0.8em; color:#999;">
-                DISCLAIMER<br>
-                All rights reserved. © 2025
-            </p>
+            <p><a href="mailto:contact@guillaumerobinet.com" style="border-bottom: 1px solid #000;">contact@guillaumerobinet.com</a></p>
         </div>
-
     </div>
 
     <script>
@@ -290,13 +252,17 @@
             "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&w=2000&auto=format&fit=crop"
         ];
 
+        // 1. AU CHARGEMENT (OnLoad)
         window.onload = function() {
+            // Photo intro
             const indexIntro = Math.floor(Math.random() * myPhotos.length);
             document.getElementById('intro-image').src = myPhotos[indexIntro];
 
+            // Photo accueil initiale
             const indexHome = Math.floor(Math.random() * myPhotos.length);
             document.getElementById('home-random-img').src = myPhotos[indexHome];
 
+            // Animation Fade
             setTimeout(function() {
                 const intro = document.getElementById('intro-screen');
                 const main = document.getElementById('main-site');
@@ -306,21 +272,31 @@
             }, 1500);
         };
 
+        // 2. FONCTION NAVIGATION SIMPLE
         function showPage(pageId) {
+            // Cache l'accueil
             document.getElementById('home-view').style.display = 'none';
-            document.querySelectorAll('.content-section').forEach(sec => {
-                sec.classList.remove('active-section');
-            });
+            // Cache les autres pages
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
+            // Affiche la bonne page
             const active = document.getElementById(pageId);
             if(active) active.classList.add('active-section');
             window.scrollTo(0,0);
         }
 
+        // 3. FONCTION RETOUR ACCUEIL + CHANGEMENT PHOTO
         function goHome() {
-            document.querySelectorAll('.content-section').forEach(sec => {
-                sec.classList.remove('active-section');
-            });
+            // Cache tout le texte
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
+            
+            // Affiche la vue accueil
             document.getElementById('home-view').style.display = 'flex';
+            
+            // --- C'EST ICI QUE CA SE PASSE ---
+            // On tire une nouvelle photo aléatoire uniquement maintenant
+            const newIndex = Math.floor(Math.random() * myPhotos.length);
+            document.getElementById('home-random-img').src = myPhotos[newIndex];
+            
             window.scrollTo(0,0);
         }
     </script>
