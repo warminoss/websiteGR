@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GUILLAUME ROBINET</title>
     <style>
-        /* --- STYLE GENERAL --- */
         :root {
             --bg-color: #ffffff;
             --text-color: #000000;
@@ -14,10 +13,7 @@
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
+            margin: 0; padding: 0; height: 100%; width: 100%;
             font-family: var(--font-main);
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -28,106 +24,58 @@
             position: fixed;
         }
 
-        /* --- 1. INTRO SPLASH (FIX RADICAL ANTI-CROP) --- */
+        /* --- INTRO (ANTI-CROP) --- */
         #intro-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: white;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 2.0s ease-in-out;
-            pointer-events: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: white; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 2.0s ease-in-out; pointer-events: none;
         }
 
         #intro-screen img {
-            /* On force l'image à rester dans une boîte de 90% du téléphone */
-            max-width: 90vw; 
-            max-height: 90vh;
-            width: auto;
-            height: auto;
-            /* contain = INTERDICTION de couper les bords */
-            object-fit: contain; 
-            display: block;
+            max-width: 90vw; max-height: 90vh;
+            width: auto; height: auto;
+            object-fit: contain; display: block;
         }
 
-        /* --- 2. CONTENEUR PRINCIPAL --- */
+        /* --- SITE --- */
         #main-site {
-            opacity: 0;
-            transition: opacity 2s ease-in;
-            padding: 40px;
-            max-width: 960px;
-            margin: 0 auto;
-            height: 100%;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
+            opacity: 0; transition: opacity 2s ease-in;
+            padding: 40px; max-width: 960px; margin: 0 auto;
+            height: 100%; box-sizing: border-box;
+            display: flex; flex-direction: column;
         }
 
         header { margin-bottom: 20px; flex-shrink: 0; }
-
-        h1 {
-            font-size: 1.4rem;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            font-weight: normal;
-            letter-spacing: 2px;
-            cursor: pointer;
-            display: inline-block;
-        }
-
+        h1 { font-size: 1.4rem; text-transform: uppercase; margin-bottom: 20px; font-weight: normal; letter-spacing: 2px; cursor: pointer; }
         nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li {
-            text-transform: uppercase;
-            cursor: pointer;
-            margin-right: 30px;
-            display: inline-block;
-            font-size: 0.95rem;
-            color: #888;
-        }
+        nav li { text-transform: uppercase; cursor: pointer; margin-right: 30px; display: inline-block; font-size: 0.95rem; color: #888; }
         
         @media (max-width: 600px) {
             nav li { display: block; margin-bottom: 10px; }
             #main-site { padding: 25px; }
         }
 
-        .content-section {
-            display: none;
-            animation: fadeIn 0.6s ease;
-            overflow-y: auto;
-            height: 100%;
-        }
+        .content-section { display: none; animation: fadeIn 0.6s ease; overflow-y: auto; height: 100%; }
         .active-section { display: block; }
 
-        /* --- VUE ACCUEIL (ANTI-CROP AUSSI) --- */
-        #home-view {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-            width: 100%;
-            overflow: hidden;
-        }
-
+        /* --- ACCUEIL --- */
+        #home-view { display: flex; justify-content: center; align-items: center; flex-grow: 1; width: 100%; overflow: hidden; }
         .framed-image {
-            max-width: 90vw;
-            max-height: 55vh; 
-            width: auto;
-            height: auto;
+            max-width: 90vw; max-height: 55vh; 
+            width: auto; height: auto;
             object-fit: contain;
             border: 15px solid white; 
             box-shadow: 0 5px 20px rgba(0,0,0,0.08); 
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* --- CONTENU --- */
+        .list-item { margin-bottom: 30px; display: grid; grid-template-columns: 75px 1fr; }
+        .year { font-weight: bold; }
+        h3 { text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 30px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -155,44 +103,57 @@
         </div>
 
         <div id="news" class="content-section">
-            <h3>NEWS</h3>
+            <h3>News</h3>
             <div class="list-item">
                 <div class="year">2025</div>
                 <div class="details">
-                    <p>Sprüth Magers New York solo show.</p>
+                    <strong>Inherited Images</strong><br>Sprüth Magers New York<br>March 14 – April 18, 2025
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="year">2025</div>
+                <div class="details">
+                    <strong>Staatspreis NRW 2025</strong><br>State Prize of North Rhine-Westphalia awarded to Andreas Gursky.
                 </div>
             </div>
         </div>
-        
+
         <div id="exhibitions" class="content-section">
-            <h3>EXHIBITIONS</h3>
-            <p>Pinakothek der Moderne, Munich 2025</p>
+            <h3>Exhibitions</h3>
+            <div class="list-item"><div class="year">2025</div><div class="details">Sweeter than Honey, Pinakothek der Moderne, Munich</div></div>
+            <div class="list-item"><div class="year">2024</div><div class="details">Thomas Demand: The Object Lesson, Art Gallery of NSW, Sydney</div></div>
         </div>
 
         <div id="monographs" class="content-section">
-            <h3>MONOGRAPHS</h3>
-            <p>Visual Spaces of Today, Fondazione MAST, 2023</p>
+            <h3>Monographs</h3>
+            <div class="list-item"><div class="year">2023</div><div class="details">Visual Spaces of Today, Fondazione MAST, Italy</div></div>
+            <div class="list-item"><div class="year">2021</div><div class="details">Andreas Gursky, self-published artist book, 188 pages</div></div>
         </div>
 
         <div id="biography" class="content-section">
-            <h3>BIOGRAPHY</h3>
-            <p>Born 1985 in France. Lives and works in Paris.</p>
+            <h3>Biography</h3>
+            <p>Born 1955 in Leipzig. Lives and works in Düsseldorf. Studied under Bernd Becher at Kunstakademie Düsseldorf.</p>
         </div>
 
         <div id="contact" class="content-section">
-            <h3>CONTACT</h3>
-            <p><a href="mailto:contact@guillaumerobinet.com">contact@guillaumerobinet.com</a></p>
+            <h3>Contact</h3>
+            <p>Represented by Sprüth Magers.<br>gursky@spruethmagers.com</p>
         </div>
     </div>
 
     <script>
+        // Vérifiez bien que sur GitHub c'est écrit exactement "acceuil3.jpg"
         const homePhotos = ["acceuil1.jpg", "acceuil2.jpg", "acceuil3.jpg"];
 
-        window.onload = function() {
-            const indexHome = Math.floor(Math.random() * homePhotos.length);
+        function changeImage() {
             const imgEl = document.getElementById('home-random-img');
-            imgEl.src = homePhotos[indexHome];
+            // On tire un chiffre entre 0 et 2
+            const randomIndex = Math.floor(Math.random() * homePhotos.length);
+            imgEl.src = homePhotos[randomIndex];
+        }
 
+        window.onload = function() {
+            changeImage();
             setTimeout(function() {
                 const intro = document.getElementById('intro-screen');
                 const main = document.getElementById('main-site');
@@ -212,8 +173,7 @@
         function goHome() {
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
             document.getElementById('home-view').style.display = 'flex';
-            const newIndex = Math.floor(Math.random() * homePhotos.length);
-            document.getElementById('home-random-img').src = homePhotos[newIndex];
+            changeImage();
         }
     </script>
 </body>
