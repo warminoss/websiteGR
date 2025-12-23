@@ -24,29 +24,44 @@
             position: fixed;
         }
 
-        /* --- INTRO (CANVAS SAND) --- */
-        #intro-screen {
+        /* --- LOADER SVG (PIED DE POULE) --- */
+        #loader-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9999;
-            pointer-events: none; /* Permet de cliquer à travers une fois fini */
+            background: white;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            /* Transition pour l'opacité finale */
+            transition: opacity 0.8s ease-out;
         }
 
-        #sand-canvas {
-            width: 100%;
-            height: 100%;
+        /* Le SVG remplit l'écran */
+        #melt-svg {
+            width: 100%; height: 100%;
             display: block;
         }
 
-        /* --- SITE --- */
+        /* --- SITE PRINCIPAL --- */
         #main-site {
-            /* On commence opacité 0, mais on le passera à 1 juste avant de vider le sable */
-            opacity: 0; 
-            transition: opacity 0.1s; /* Transition très rapide */
+            opacity: 0; /* Caché au départ */
+            filter: blur(10px); /* Flou artistique au départ */
+            transform: scale(0.98); /* Légèrement plus petit */
+            
+            /* Transition artistique pour l'apparition */
+            transition: opacity 1.5s ease, filter 1.5s ease, transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+            
             padding: 40px; max-width: 960px; margin: 0 auto;
             height: 100%; box-sizing: border-box;
             display: flex; flex-direction: column;
-            position: relative;
+            position: relative; 
             z-index: 1;
+        }
+
+        /* Classe ajoutée en JS pour révéler le site */
+        #main-site.revealed {
+            opacity: 1;
+            filter: blur(0px);
+            transform: scale(1);
         }
 
         header { margin-bottom: 20px; flex-shrink: 0; }
@@ -83,8 +98,27 @@
 </head>
 <body>
 
-    <div id="intro-screen">
-        <canvas id="sand-canvas"></canvas>
+    <!-- LOADER AVEC EFFET FONTE -->
+    <div id="loader-container">
+        <svg id="melt-svg" preserveAspectRatio="none">
+            <defs>
+                <!-- Motif Pied de Poule (Houndstooth) -->
+                <pattern id="houndstooth" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M0,0 L20,20 L40,0 L40,20 L20,40 L0,20 Z M20,0 L40,0 L40,20 L20,20 Z M0,20 L20,20 L20,40 L0,40 Z" fill="black"/>
+                </pattern>
+                
+                <!-- Filtre de distorsion liquide -->
+                <filter id="plastic-melt">
+                    <!-- Turbulence génère du bruit fractal (nuages/liquide) -->
+                    <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="1" result="noise" />
+                    <!-- DisplacementMap utilise le bruit pour tordre l'image source -->
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
+                </filter>
+            </defs>
+            
+            <!-- Rectangle rempli par le motif -->
+            <rect id="pattern-rect" width="100%" height="100%" fill="url(#houndstooth)" style="filter: url(#plastic-melt);" />
+        </svg>
     </div>
 
     <div id="main-site">
@@ -168,102 +202,53 @@
             changeImage();
         }
 
-        // --- ANIMATION SABLE (REMPLIR PUIS VIDER) ---
-        function startSandAnimation() {
-            const canvas = document.getElementById('sand-canvas');
-            const ctx = canvas.getContext('2d');
+        // --- ANIMATION PLASTIQUE FONDU ---
+        window.onload = function() {
+            changeImage(); // Charger une image aléatoire
+
+            const displacementMap = document.querySelector('feDisplacementMap');
+            const loaderContainer = document.getElementById('loader-container');
             const mainSite = document.getElementById('main-site');
-            const introScreen = document.getElementById('intro-screen');
-
-            // Dimensions
-            let w = canvas.width = window.innerWidth;
-            let h = canvas.height = window.innerHeight;
-
-            // Paramètres de temps
-            const fillDuration = 1500; // Temps pour remplir (ms)
-            const pauseDuration = 200; // Petite pause au noir complet
-            const clearDuration = 1500; // Temps pour vider (ms)
-
+            
+            // Paramètres de l'animation
+            let scaleVal = 0;
+            const targetScale = 600; // Plus c'est haut, plus ça fond fort
+            const duration = 2000; // Durée de l'effet de fonte (ms)
             const startTime = Date.now();
-            let phase = 'filling'; // filling, pause, clearing, done
 
-            function animate() {
+            function animateMelt() {
                 const now = Date.now();
-                const elapsed = now - startTime;
+                const progress = (now - startTime) / duration;
 
-                // Calcul du nombre de particules (plus l'écran est grand, plus il faut de particules)
-                // On utilise une valeur très élevée pour "vider" et "remplir" rapidement
-                const particleCount = Math.floor((w * h) / 800); 
-
-                if (phase === 'filling') {
-                    // --- PHASE 1 : REMPLISSAGE (NOIR) ---
-                    ctx.fillStyle = "black";
-                    ctx.globalCompositeOperation = "source-over"; // Dessine par dessus
+                if (progress < 1) {
+                    // Fonction d'accélération (ease-in exponential) pour que la fonte s'accélère
+                    const ease = progress * progress * progress; 
                     
-                    for(let i=0; i<particleCount; i++){
-                        const x = Math.random() * w;
-                        const y = Math.random() * h;
-                        const s = Math.random() * 4 + 1; // Taille variable
-                        ctx.fillRect(x, y, s, s);
-                    }
-
-                    // Si temps écoulé, on passe à la suite
-                    if (elapsed > fillDuration) {
-                        // On s'assure que c'est bien tout noir
-                        ctx.fillRect(0,0,w,h);
-                        phase = 'pause';
-                    }
-                    requestAnimationFrame(animate);
-
-                } else if (phase === 'pause') {
-                    // --- PHASE 2 : PAUSE & PREPARATION ---
-                    // Pendant que c'est noir, on rend le site visible derrière (opacity 1)
-                    // Le canvas cache encore tout, donc l'utilisateur ne voit rien changer
-                    mainSite.style.opacity = '1';
+                    scaleVal = ease * targetScale;
                     
-                    if (elapsed > fillDuration + pauseDuration) {
-                        phase = 'clearing';
-                    }
-                    requestAnimationFrame(animate);
+                    // On applique la distorsion au filtre SVG
+                    displacementMap.setAttribute('scale', scaleVal);
 
-                } else if (phase === 'clearing') {
-                    // --- PHASE 3 : VIDAGE (RETOUR AU BLANC) ---
-                    // C'est ici que la magie opère : 'destination-out' efface les pixels
-                    // Cela révèle le site (blanc avec nom noir) situé en dessous
-                    ctx.globalCompositeOperation = "destination-out"; 
-
-                    for(let i=0; i<particleCount; i++){
-                        const x = Math.random() * w;
-                        const y = Math.random() * h;
-                        const s = Math.random() * 5 + 2; // Taille un peu plus grosse pour vider bien
-                        ctx.fillRect(x, y, s, s);
+                    // Vers la fin de la fonte, on commence à rendre le loader transparent
+                    if (progress > 0.6) {
+                        loaderContainer.style.opacity = 1 - ((progress - 0.6) * 2.5);
+                        // Et on commence à faire apparaître le site
+                        mainSite.classList.add('revealed');
                     }
 
-                    if (elapsed > fillDuration + pauseDuration + clearDuration) {
-                        phase = 'done';
-                        // Fin de l'anim
-                        ctx.clearRect(0,0,w,h); // On vide tout ce qui reste
-                        introScreen.style.display = 'none'; // On retire le calque
-                    } else {
-                        requestAnimationFrame(animate);
-                    }
+                    requestAnimationFrame(animateMelt);
+                } else {
+                    // Fin de l'animation
+                    loaderContainer.style.display = 'none';
+                    mainSite.classList.add('revealed'); // Sûreté
                 }
             }
 
-            animate();
-        }
-
-        window.onload = function() {
-            changeImage();
-            // Petit délai pour s'assurer que le rendu est prêt
-            setTimeout(startSandAnimation, 50);
+            // Petit délai avant de commencer pour que l'oeil voit le motif
+            setTimeout(() => {
+                requestAnimationFrame(animateMelt);
+            }, 600);
         };
-
-        window.onresize = function() {
-            const canvas = document.getElementById('sand-canvas');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
     </script>
 </body>
 </html>
