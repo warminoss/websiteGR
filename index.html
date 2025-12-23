@@ -166,14 +166,10 @@
     </div>
 
     <script>
-        const homePhotos = ["acceuil1.jpg", "acceuil2.jpg", "acceuil3.jpg"];
-
+        // MODIFICATION : Plus de liste aléatoire, uniquement la photo 3
         function changeImage() {
             const imgEl = document.getElementById('home-random-img');
-            if(homePhotos.length > 0) {
-                const randomIndex = Math.floor(Math.random() * homePhotos.length);
-                imgEl.src = homePhotos[randomIndex];
-            }
+            imgEl.src = "acceuil3.jpg";
         }
 
         function showPage(pageId) {
@@ -186,12 +182,12 @@
         function goHome() {
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
             document.getElementById('home-view').style.display = 'flex';
-            changeImage();
+            changeImage(); // Recharge l'image 3
         }
 
         // --- ANIMATION HYPNOTIQUE ---
         window.onload = function() {
-            changeImage();
+            changeImage(); // Charge l'image 3 au démarrage
 
             const displacementMap = document.querySelector('feDisplacementMap');
             const turbulence = document.querySelector('feTurbulence');
@@ -213,14 +209,13 @@
 
                     // LE SECRET : Courbe en 3 temps
                     if (progress < 0.2) {
-                        // PHASE 1 : Attaque Rapide (Début de la fonte)
+                        // PHASE 1 : Attaque Rapide
                         ease = progress * 5; 
                         scaleVal = ease * 200; 
                         freqVal = 0.02;
                     } 
                     else if (progress < 0.85) {
                         // PHASE 2 : HYPNOSE (Décélération visqueuse)
-                        // C'est ici que ça devient étrange et lent
                         const subProgress = (progress - 0.2) / 0.65;
                         scaleVal = 200 + (subProgress * 600); 
                         freqVal = 0.02 - (subProgress * 0.015); 
