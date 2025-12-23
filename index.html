@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NIGHT LEAKS</title>
     <style>
+        /* Import de la police "Dégoulinante" */
+        @import url('https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap');
+
         :root {
             --bg-color: #ffffff;
             --text-color: #000000;
             --font-main: Verdana, Geneva, Tahoma, sans-serif;
-            --font-size: 15px; 
+            --font-creepy: 'Rubik Wet Paint', cursive; /* Nouvelle police */
+            --font-size: 14px; 
         }
 
         body, html {
@@ -36,7 +40,6 @@
         #melt-svg {
             width: 100%; height: 100%;
             display: block;
-            /* Optimisation du rendu pour supporter le FractalNoise */
             shape-rendering: optimizeSpeed; 
         }
 
@@ -53,13 +56,35 @@
         #main-site.visible { opacity: 1; }
 
         header { margin-bottom: 20px; flex-shrink: 0; }
-        h1 { font-size: 1.4rem; text-transform: uppercase; margin-bottom: 20px; font-weight: normal; letter-spacing: 2px; cursor: pointer; }
+        
+        /* TITRE NIGHT LEAKS */
+        h1 { 
+            font-family: var(--font-creepy); /* Application de la police */
+            font-size: 2.2rem; /* Un peu plus gros pour bien voir l'effet */
+            text-transform: uppercase; 
+            margin-bottom: 20px; 
+            font-weight: normal; 
+            letter-spacing: 2px; 
+            cursor: pointer; 
+            /* Petit ajustement pour l'alignement visuel de cette police */
+            line-height: 1.2;
+        }
+
         nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li { text-transform: uppercase; cursor: pointer; margin-right: 30px; display: inline-block; font-size: 0.95rem; color: #888; }
+        nav li { 
+            font-family: var(--font-main); /* Le menu reste propre et lisible */
+            text-transform: uppercase; 
+            cursor: pointer; 
+            margin-right: 30px; 
+            display: inline-block; 
+            font-size: 0.95rem; 
+            color: #888; 
+        }
         
         @media (max-width: 600px) {
             nav li { display: block; margin-bottom: 10px; }
             #main-site { padding: 25px; }
+            h1 { font-size: 1.8rem; } /* Ajustement mobile */
         }
 
         .content-section { display: none; animation: fadeIn 0.6s ease; overflow-y: auto; height: 100%; }
@@ -93,7 +118,6 @@
                 </pattern>
                 
                 <filter id="liquid-melt" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-                    <!-- CHANGEMENT ICI : FractalNoise + 2 Octaves pour un effet "Huileuse/Lourde" -->
                     <feTurbulence id="noise-layer" type="fractalNoise" baseFrequency="0.01 0.04" numOctaves="2" result="noise" seed="0" />
                     <feDisplacementMap id="map-layer" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
                 </filter>
@@ -104,7 +128,7 @@
 
     <div id="main-site">
         <header>
-            <h1 onclick="goHome()">GUILLAUME ROBINET</h1>
+            <h1 onclick="goHome()">NIGHT LEAKS</h1>
             <nav>
                 <ul>
                     <li onclick="showPage('news')">News</li>
@@ -162,7 +186,7 @@
             const width = window.innerWidth;
             const isDesktop = width > 768; 
 
-            // --- CONFIGURATION ---
+            // --- CONFIGURATION SVG ---
             const turbulence = document.getElementById('noise-layer');
             const displacement = document.getElementById('map-layer');
             const svgContainer = document.getElementById('loader-container');
@@ -170,31 +194,27 @@
             
             const seed = Math.floor(Math.random() * 100);
 
-            // NOUVEAU REGLAGE "JE NE SAIS QUOI" (Effet Coulure)
-            // freqX basse (0.01) = vagues larges
-            // freqY haute (0.05 ou 0.02) = stries verticales
+            // Reglage "Huileuse / Coulure"
             let freqX, freqY;
 
             if (isDesktop) {
-                // Sur grand écran, on étire encore plus pour faire "Fondre"
                 freqX = 0.006; 
                 freqY = 0.04;  
             } else {
-                // Sur mobile
                 freqX = 0.01;
                 freqY = 0.06;
             }
 
-            turbulence.setAttribute('type', "fractalNoise"); // Plus lisse que turbulence
+            turbulence.setAttribute('type', "fractalNoise");
             turbulence.setAttribute('baseFrequency', `${freqX} ${freqY}`);
-            turbulence.setAttribute('numOctaves', "2"); // Plus de détails/complexité
+            turbulence.setAttribute('numOctaves', "2");
             turbulence.setAttribute('seed', seed);
 
             // --- SEQUENCES ---
             let sequence = [];
 
             if (!isDesktop) {
-                // MOBILE : Rapide, effet impact
+                // SEQUENCE MOBILE
                 sequence = [
                     { time: 1200, scale: width * 0.3, freqMult: 1.0 }, 
                     { time: 1450, scale: width * 1.2, freqMult: 0.9 }, 
@@ -203,27 +223,28 @@
                     { time: 2300, showSite: true }
                 ];
             } else {
-                // DESKTOP : Majestueux, effet coulure
+                // SEQUENCE DESKTOP (Stop Motion / Coulure)
                 sequence = [
                     // T=0 : Fixe
                     
-                    // 1. Amorce : Le plastique se détend
+                    // 1. Amorce
                     { time: 1200, scale: width * 0.1, freqMult: 1.0 }, 
                     
-                    // 2. Coulure : Ça commence à dégouliner
+                    // 2. Coulure
                     { time: 1500, scale: width * 0.3, freqMult: 0.95 }, 
                     
-                    // 3. Distortion lourde : Stop motion marqué
+                    // 3. Distortion lourde
                     { time: 1900, scale: width * 0.6, freqMult: 0.85 }, 
                     
-                    // 4. Liquéfaction : Les fréquences changent pour étirer
+                    // 4. Liquéfaction
                     { time: 2400, scale: width * 1.2, freqMult: 0.7 }, 
 
                     // 5. Destruction
                     { time: 2900, scale: width * 2.5, freqMult: 0.5 }, 
                     
-                    // CUT
+                    // CUT BLANC
                     { time: 3200, clear: true },
+                    // CUT SITE
                     { time: 3500, showSite: true }
                 ];
             }
@@ -236,15 +257,12 @@
                         svgContainer.style.display = 'none';
                         mainSite.classList.add('visible');
                     } else {
-                        // Mise à jour brute (Stop Motion)
                         displacement.setAttribute('scale', step.scale);
                         
-                        // On garde l'anisotropie (différence X/Y)
                         const fX = freqX * step.freqMult;
                         const fY = freqY * step.freqMult;
-                        
-                        // Petit décalage aléatoire pour que le "liquide" bouge un peu
                         const shift = Math.random() * 0.005;
+                        
                         turbulence.setAttribute('baseFrequency', `${fX} ${fY + shift}`);
                     }
                 }, step.time);
@@ -253,5 +271,3 @@
     </script>
 </body>
 </html>
-
-
