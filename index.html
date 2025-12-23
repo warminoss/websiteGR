@@ -28,7 +28,7 @@
         #loader-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9999;
-            background: white; /* Le fond reste blanc quand le motif s'efface */
+            background: white; 
             display: flex; align-items: center; justify-content: center;
             pointer-events: none;
         }
@@ -37,14 +37,13 @@
             width: 100%; height: 100%;
             display: block;
             opacity: 1;
-            /* Transition pour la disparition finale vers le blanc */
             transition: opacity 0.4s ease-out; 
         }
 
         /* --- SITE PRINCIPAL --- */
         #main-site {
-            opacity: 0; /* Totalement invisible au début */
-            transition: opacity 1.5s ease; /* Apparition douce après le blanc */
+            opacity: 0; 
+            transition: opacity 1.5s ease; /* Apparition douce */
             padding: 40px; max-width: 960px; margin: 0 auto;
             height: 100%; box-sizing: border-box;
             display: flex; flex-direction: column;
@@ -100,9 +99,7 @@
                 </pattern>
                 
                 <filter id="plastic-melt" x="-20%" y="-20%" width="140%" height="140%">
-                    <!-- Turbulence liquide -->
                     <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="1" result="noise" seed="1" />
-                    <!-- Displacement (Scale démarre à 0) -->
                     <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
                 </filter>
             </defs>
@@ -202,69 +199,62 @@
             const loaderContainer = document.getElementById('loader-container');
             const mainSite = document.getElementById('main-site');
             
-            // Temps total de l'animation de fonte : 3.8s (Sidération)
+            // Temps total de l'animation de fonte : 3.8s
             const duration = 3800; 
-            const startTime = Date.now();
+            let startTime = null;
 
             function animateHypnosis() {
+                if (!startTime) startTime = Date.now();
                 const now = Date.now();
                 const progress = (now - startTime) / duration; // 0 à 1
 
                 if (progress < 1) {
                     let ease, scaleVal, freqVal;
 
-                    // LE SECRET : La courbe de vitesse en 3 temps
+                    // LE SECRET : Courbe en 3 temps
                     if (progress < 0.2) {
-                        // PHASE 1 : Attaque (0% à 20%) - Rapide
-                        // Le motif commence à bouger normalement
-                        ease = progress * 5; // monte de 0 à 1
+                        // PHASE 1 : Attaque Rapide (Début de la fonte)
+                        ease = progress * 5; 
                         scaleVal = ease * 200; 
                         freqVal = 0.02;
                     } 
                     else if (progress < 0.85) {
-                        // PHASE 2 : HYPNOSE (20% à 85%) - Décélérée / Lente
-                        // C'est le moment "weird". On ralentit drastiquement la progression de la distorsion.
-                        // On avance de 20% à 85% du temps, mais la distorsion n'augmente que doucement.
-                        const subProgress = (progress - 0.2) / 0.65; // 0 à 1 dans cette phase
-                        
-                        // Mouvement lent et visqueux
-                        scaleVal = 200 + (subProgress * 600); // de 200 à 800 (gros étirement mais lent)
-                        
-                        // La fréquence baisse doucement pour faire des "grosses vagues" molles
+                        // PHASE 2 : HYPNOSE (Décélération visqueuse)
+                        // C'est ici que ça devient étrange et lent
+                        const subProgress = (progress - 0.2) / 0.65;
+                        scaleVal = 200 + (subProgress * 600); 
                         freqVal = 0.02 - (subProgress * 0.015); 
                     } 
                     else {
-                        // PHASE 3 : FIN (85% à 100%) - Accélération finale
-                        // Ça s'emballe pour disparaitre
+                        // PHASE 3 : DISPARITION (Accélération finale)
                         const subProgress = (progress - 0.85) / 0.15;
-                        scaleVal = 800 + (subProgress * 1000); // Explosion vers 1800
-                        freqVal = 0.005; // Très liquide
+                        scaleVal = 800 + (subProgress * 1000); 
+                        freqVal = 0.005; 
                         
-                        // À la toute fin (95%), on commence à fade out le motif vers le blanc
                         if (subProgress > 0.5) {
                             svgElement.style.opacity = 1 - ((subProgress - 0.5) * 2);
                         }
                     }
 
-                    // Application des valeurs
                     displacementMap.setAttribute('scale', scaleVal);
                     turbulence.setAttribute('baseFrequency', `${freqVal} ${freqVal}`);
 
                     requestAnimationFrame(animateHypnosis);
                 } else {
-                    // FIN DE L'ANIMATION : Écran Blanc
+                    // FIN : Écran Blanc -> Site
                     svgElement.style.opacity = '0';
-                    
-                    // Petite pause sur le BLANC TOTAL (0.3s) pour marquer la transition
                     setTimeout(() => {
-                        loaderContainer.style.display = 'none'; // On retire le loader
-                        mainSite.classList.add('visible'); // Le site apparait doucement
+                        loaderContainer.style.display = 'none';
+                        mainSite.classList.add('visible');
                     }, 300);
                 }
             }
 
-            // Départ immédiat mais smooth
-            requestAnimationFrame(animateHypnosis);
+            // --- LE DELAI DE MEMORISATION ---
+            // On attend 1.2 secondes (image fixe) avant de lancer la fonte
+            setTimeout(() => {
+                requestAnimationFrame(animateHypnosis);
+            }, 1200);
         };
     </script>
 </body>
