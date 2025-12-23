@@ -31,34 +31,23 @@
             background: white; 
             display: flex; align-items: center; justify-content: center;
             pointer-events: none;
-            /* Force l'accélération matérielle GPU */
-            transform: translate3d(0,0,0); 
-            will-change: opacity;
         }
 
         #melt-svg {
-            /* On laisse le CSS remplir l'écran */
             width: 100%; height: 100%;
             display: block;
-            opacity: 1;
-            transition: opacity 0.4s ease-out; 
-            
-            /* Optimisation critique : le rendu géométrique est plus rapide */
-            shape-rendering: optimizeSpeed; 
-            image-rendering: optimizeSpeed;
+            /* Pas de transition CSS ici, on veut du CUT brutal */
         }
 
         /* --- SITE --- */
         #main-site {
             opacity: 0; 
-            transition: opacity 1.5s ease;
+            transition: opacity 2.0s ease; /* Apparition lente après la violence des cuts */
             padding: 40px; max-width: 960px; margin: 0 auto;
             height: 100%; box-sizing: border-box;
             display: flex; flex-direction: column;
             position: relative; 
             z-index: 1;
-            /* Optimisation GPU pour l'apparition */
-            will-change: opacity; 
         }
 
         #main-site.visible { opacity: 1; }
@@ -76,7 +65,6 @@
         .content-section { display: none; animation: fadeIn 0.6s ease; overflow-y: auto; height: 100%; }
         .active-section { display: block; }
 
-        /* --- ACCUEIL --- */
         #home-view { display: flex; justify-content: center; align-items: center; flex-grow: 1; width: 100%; overflow: hidden; }
         .framed-image {
             max-width: 90vw; max-height: 55vh; 
@@ -87,7 +75,6 @@
             display: block;
         }
 
-        /* --- CONTENU --- */
         .list-item { margin-bottom: 30px; display: grid; grid-template-columns: 75px 1fr; }
         .year { font-weight: bold; }
         h3 { text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 30px; }
@@ -97,27 +84,23 @@
 </head>
 <body>
 
-    <!-- LOADER SVG OPTIMISÉ -->
+    <!-- LOADER SVG -->
     <div id="loader-container">
-        <!-- L'attribut viewBox sera défini en JS pour limiter la résolution de calcul -->
         <svg id="melt-svg" preserveAspectRatio="none">
             <defs>
                 <pattern id="houndstooth" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
                     <path d="M0,0 L20,20 L40,0 L40,20 L20,40 L0,20 Z M20,0 L40,0 L40,20 L20,20 Z M0,20 L20,20 L20,40 L0,40 Z" fill="black"/>
                 </pattern>
                 
-                <!-- Filter avec color-interpolation-filters pour aider le GPU -->
-                <filter id="random-melt" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+                <filter id="strobe-melt" x="-20%" y="-20%" width="140%" height="140%">
                     <feTurbulence id="noise-layer" type="turbulence" baseFrequency="0.02" numOctaves="1" result="noise" seed="0" />
-                    <!-- scale="0" au départ -->
                     <feDisplacementMap id="map-layer" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
                 </filter>
             </defs>
-            <rect id="pattern-rect" width="100%" height="100%" fill="url(#houndstooth)" style="filter: url(#random-melt);" />
+            <rect id="pattern-rect" width="100%" height="100%" fill="url(#houndstooth)" style="filter: url(#strobe-melt);" />
         </svg>
     </div>
 
-    <!-- SITE -->
     <div id="main-site">
         <header>
             <h1 onclick="goHome()">GUILLAUME ROBINET</h1>
@@ -138,37 +121,20 @@
 
         <div id="news" class="content-section">
             <h3>News</h3>
-            <div class="list-item">
-                <div class="year">2025</div>
-                <div class="details">
-                    <strong>Inherited Images</strong><br>Sprüth Magers New York<br>March 14 – April 18, 2025
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="year">2025</div>
-                <div class="details">
-                    <strong>Staatspreis NRW 2025</strong><br>State Prize of North Rhine-Westphalia awarded to Andreas Gursky.
-                </div>
-            </div>
+            <div class="list-item"><div class="year">2025</div><div class="details"><strong>Inherited Images</strong><br>Sprüth Magers New York</div></div>
         </div>
-
         <div id="exhibitions" class="content-section">
             <h3>Exhibitions</h3>
             <div class="list-item"><div class="year">2025</div><div class="details">Sweeter than Honey, Pinakothek der Moderne, Munich</div></div>
-            <div class="list-item"><div class="year">2024</div><div class="details">Thomas Demand: The Object Lesson, Art Gallery of NSW, Sydney</div></div>
         </div>
-
         <div id="monographs" class="content-section">
             <h3>Monographs</h3>
             <div class="list-item"><div class="year">2023</div><div class="details">Visual Spaces of Today, Fondazione MAST, Italy</div></div>
-            <div class="list-item"><div class="year">2021</div><div class="details">Andreas Gursky, self-published artist book, 188 pages</div></div>
         </div>
-
         <div id="biography" class="content-section">
             <h3>Biography</h3>
-            <p>Born 1955 in Leipzig. Lives and works in Düsseldorf. Studied under Bernd Becher at Kunstakademie Düsseldorf.</p>
+            <p>Born 1955 in Leipzig. Lives and works in Düsseldorf.</p>
         </div>
-
         <div id="contact" class="content-section">
             <h3>Contact</h3>
             <p>Represented by Sprüth Magers.<br>gursky@spruethmagers.com</p>
@@ -176,150 +142,85 @@
     </div>
 
     <script>
-        function changeImage() {
-            const imgEl = document.getElementById('home-random-img');
-            imgEl.src = "acceuil3.jpg"; 
-        }
-
+        function changeImage() { document.getElementById('home-random-img').src = "acceuil3.jpg"; }
         function showPage(pageId) {
             document.getElementById('home-view').style.display = 'none';
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
             const active = document.getElementById(pageId);
             if(active) active.classList.add('active-section');
         }
-
         function goHome() {
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
             document.getElementById('home-view').style.display = 'flex';
-            changeImage(); 
         }
 
-        // --- PRESETS ALEATOIRES ---
-        const meltPresets = [
-            {
-                name: "Viscous", 
-                type: "turbulence", 
-                octaves: "1", 
-                freqStartX: 0.02, freqStartY: 0.02,
-                freqEndX: 0.005, freqEndY: 0.005,
-                maxScale: 1500
-            },
-            {
-                name: "Glitch", 
-                type: "turbulence",
-                octaves: "1",
-                freqStartX: 0.05, freqStartY: 0.002, 
-                freqEndX: 0.01, freqEndY: 0.1,       
-                maxScale: 2500 
-            },
-            {
-                name: "Oil", 
-                type: "fractalNoise", 
-                octaves: "1", // Réduit à 1 pour performance mobile
-                freqStartX: 0.03, freqStartY: 0.03,
-                freqEndX: 0.01, freqEndY: 0.01,
-                maxScale: 1200
-            }
+        // --- PRESETS (Textures aléatoires) ---
+        const presets = [
+            { type: "turbulence", freqBase: 0.015, octaves: 1 }, // Visqueux
+            { type: "turbulence", freqBase: 0.04, octaves: 1 },  // Serré / Electrique
+            { type: "fractalNoise", freqBase: 0.02, octaves: 2 } // Nuageux / Lisse
         ];
 
         window.onload = function() {
             changeImage();
 
-            // --- OPTIMISATION TABLETTE/MOBILE (Low-Res Rendering) ---
-            const svgElement = document.getElementById('melt-svg');
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-            
-            // On calcule une résolution "logique" plus faible.
-            // Au lieu d'avoir 2000px de large, on force le SVG à calculer sur 600px max
-            // Le CSS va étirer le résultat, mais le calcul sera 10x plus rapide.
-            const maxDimension = 600; 
-            const ratio = w / h;
-            
-            let viewW, viewH;
-            if (w > h) {
-                viewW = maxDimension;
-                viewH = maxDimension / ratio;
-            } else {
-                viewH = maxDimension;
-                viewW = maxDimension * ratio;
-            }
-            
-            // Application de la "fausse" résolution
-            svgElement.setAttribute('viewBox', `0 0 ${viewW} ${viewH}`);
-
-            // --- SCENARIO ---
-            const preset = meltPresets[Math.floor(Math.random() * meltPresets.length)];
+            // 1. Initialisation
+            const chosenPreset = presets[Math.floor(Math.random() * presets.length)];
             const randomSeed = Math.floor(Math.random() * 100);
 
-            const displacementMap = document.getElementById('map-layer');
             const turbulence = document.getElementById('noise-layer');
-            const loaderContainer = document.getElementById('loader-container');
+            const displacement = document.getElementById('map-layer');
+            const svgContainer = document.getElementById('loader-container');
             const mainSite = document.getElementById('main-site');
 
-            turbulence.setAttribute('type', preset.type);
-            turbulence.setAttribute('numOctaves', preset.octaves);
+            // Appliquer le preset
+            turbulence.setAttribute('type', chosenPreset.type);
+            turbulence.setAttribute('baseFrequency', `${chosenPreset.freqBase} ${chosenPreset.freqBase}`);
+            turbulence.setAttribute('numOctaves', chosenPreset.octaves);
             turbulence.setAttribute('seed', randomSeed);
-            turbulence.setAttribute('baseFrequency', `${preset.freqStartX} ${preset.freqStartY}`);
 
-            // --- ANIMATION ---
-            const duration = 3800; 
-            let startTime = null;
+            // 2. Séquence d'animation "Stop-Motion" (Rythme Artistique)
+            // On ne calcule rien entre ces temps. C'est du "CUT".
+            
+            const sequence = [
+                // T = 0 : Image intacte
+                
+                // CUT 1 : 1200ms - Premier impact (léger)
+                { time: 1200, scale: 150,  freqMult: 1.0 }, 
+                
+                // CUT 2 : 1450ms - Deuxième impact (très rapide après le 1er, effet de saccade)
+                { time: 1450, scale: 600,  freqMult: 0.8 }, 
+                
+                // CUT 3 : 1900ms - Pause... puis Destruction totale (Gros scale, basse fréquence)
+                { time: 1900, scale: 2500, freqMult: 0.3 }, 
+                
+                // CUT 4 : 2100ms - Ecran Blanc
+                { time: 2100, clear: true },
+                
+                // FIN : 2500ms - Apparition Site
+                { time: 2500, showSite: true }
+            ];
 
-            function animateHypnosis() {
-                if (!startTime) startTime = Date.now();
-                const now = Date.now();
-                const progress = (now - startTime) / duration; 
-
-                if (progress < 1) {
-                    let ease, scaleVal, currentFreqX, currentFreqY;
-
-                    // Interpolation (Maths simplifiées)
-                    currentFreqX = preset.freqStartX + (preset.freqEndX - preset.freqStartX) * progress;
-                    currentFreqY = preset.freqStartY + (preset.freqEndY - preset.freqStartY) * progress;
-
-                    // Arrondir les valeurs aide légèrement le navigateur
-                    // currentFreqX = Math.floor(currentFreqX * 1000) / 1000;
-                    // currentFreqY = Math.floor(currentFreqY * 1000) / 1000;
-
-                    // COURBE HYPNOSE
-                    if (progress < 0.2) {
-                        ease = progress * 5; 
-                        scaleVal = ease * 200; 
-                    } 
-                    else if (progress < 0.85) {
-                        const subProgress = (progress - 0.2) / 0.65;
-                        scaleVal = 200 + (subProgress * (preset.maxScale * 0.4)); 
-                    } 
-                    else {
-                        const subProgress = (progress - 0.85) / 0.15;
-                        scaleVal = (200 + (preset.maxScale * 0.4)) + (subProgress * (preset.maxScale * 0.6));
-                        
-                        if (subProgress > 0.5) {
-                            svgElement.style.opacity = 1 - ((subProgress - 0.5) * 2);
-                        }
-                    }
-
-                    // Application des attributs
-                    displacementMap.setAttribute('scale', scaleVal);
-                    
-                    // Optimisation: on ne change la fréquence que 1 frame sur 2 pour alléger la charge
-                    // Mais ici on garde fluide car la résolution est baissée.
-                    turbulence.setAttribute('baseFrequency', `${currentFreqX} ${currentFreqY}`);
-
-                    requestAnimationFrame(animateHypnosis);
-                } else {
-                    svgElement.style.opacity = '0';
-                    setTimeout(() => {
-                        loaderContainer.style.display = 'none';
+            // 3. Exécution de la séquence
+            sequence.forEach(step => {
+                setTimeout(() => {
+                    if (step.clear) {
+                        // Disparition du SVG
+                        document.getElementById('melt-svg').style.display = 'none';
+                    } else if (step.showSite) {
+                        // Fin totale
+                        svgContainer.style.display = 'none';
                         mainSite.classList.add('visible');
-                    }, 300);
-                }
-            }
-
-            setTimeout(() => {
-                requestAnimationFrame(animateHypnosis);
-            }, 1200);
+                    } else {
+                        // Mise à jour brutale des valeurs (Stop-motion)
+                        const currentFreq = chosenPreset.freqBase * step.freqMult;
+                        
+                        displacement.setAttribute('scale', step.scale);
+                        // On change légèrement la fréquence pour faire bouger la texture
+                        turbulence.setAttribute('baseFrequency', `${currentFreq} ${currentFreq}`);
+                    }
+                }, step.time);
+            });
         };
     </script>
 </body>
