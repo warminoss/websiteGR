@@ -31,15 +31,21 @@
             background: white; 
             display: flex; align-items: center; justify-content: center;
             pointer-events: none;
+            /* Force l'accélération matérielle GPU */
+            transform: translate3d(0,0,0); 
+            will-change: opacity;
         }
 
         #melt-svg {
+            /* On laisse le CSS remplir l'écran */
             width: 100%; height: 100%;
             display: block;
             opacity: 1;
             transition: opacity 0.4s ease-out; 
-            /* Important pour la netteté du motif avant la déformation */
-            shape-rendering: geometricPrecision;
+            
+            /* Optimisation critique : le rendu géométrique est plus rapide */
+            shape-rendering: optimizeSpeed; 
+            image-rendering: optimizeSpeed;
         }
 
         /* --- SITE --- */
@@ -51,6 +57,8 @@
             display: flex; flex-direction: column;
             position: relative; 
             z-index: 1;
+            /* Optimisation GPU pour l'apparition */
+            will-change: opacity; 
         }
 
         #main-site.visible { opacity: 1; }
@@ -89,17 +97,19 @@
 </head>
 <body>
 
-    <!-- LOADER SVG -->
+    <!-- LOADER SVG OPTIMISÉ -->
     <div id="loader-container">
+        <!-- L'attribut viewBox sera défini en JS pour limiter la résolution de calcul -->
         <svg id="melt-svg" preserveAspectRatio="none">
             <defs>
                 <pattern id="houndstooth" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
                     <path d="M0,0 L20,20 L40,0 L40,20 L20,40 L0,20 Z M20,0 L40,0 L40,20 L20,20 Z M0,20 L20,20 L20,40 L0,40 Z" fill="black"/>
                 </pattern>
                 
-                <filter id="random-melt" x="-20%" y="-20%" width="140%" height="140%">
-                    <!-- Les attributs seront injectés par JS aléatoirement -->
+                <!-- Filter avec color-interpolation-filters pour aider le GPU -->
+                <filter id="random-melt" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
                     <feTurbulence id="noise-layer" type="turbulence" baseFrequency="0.02" numOctaves="1" result="noise" seed="0" />
+                    <!-- scale="0" au départ -->
                     <feDisplacementMap id="map-layer" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
                 </filter>
             </defs>
@@ -168,7 +178,7 @@
     <script>
         function changeImage() {
             const imgEl = document.getElementById('home-random-img');
-            imgEl.src = "acceuil3.jpg"; // Image fixe demandée
+            imgEl.src = "acceuil3.jpg"; 
         }
 
         function showPage(pageId) {
@@ -184,56 +194,75 @@
             changeImage(); 
         }
 
-        // --- DEFINITION DES SCENARIOS ALEATOIRES ---
+        // --- PRESETS ALEATOIRES ---
         const meltPresets = [
             {
-                name: "Viscous", // L'original
+                name: "Viscous", 
                 type: "turbulence", 
                 octaves: "1", 
                 freqStartX: 0.02, freqStartY: 0.02,
                 freqEndX: 0.005, freqEndY: 0.005,
-                maxScale: 1800
+                maxScale: 1500
             },
             {
-                name: "Glitch", // Numérique / Déchiré
+                name: "Glitch", 
                 type: "turbulence",
                 octaves: "1",
-                freqStartX: 0.05, freqStartY: 0.002, // Très horizontal
-                freqEndX: 0.01, freqEndY: 0.2,       // Devient vertical
-                maxScale: 3000 // Déchirure intense
+                freqStartX: 0.05, freqStartY: 0.002, 
+                freqEndX: 0.01, freqEndY: 0.1,       
+                maxScale: 2500 
             },
             {
-                name: "Oil", // Doux / Brumeux
-                type: "fractalNoise", // Plus lisse que turbulence
-                octaves: "3", // Plus de détails
+                name: "Oil", 
+                type: "fractalNoise", 
+                octaves: "1", // Réduit à 1 pour performance mobile
                 freqStartX: 0.03, freqStartY: 0.03,
                 freqEndX: 0.01, freqEndY: 0.01,
-                maxScale: 1500
+                maxScale: 1200
             }
         ];
 
         window.onload = function() {
             changeImage();
 
-            // 1. Choix aléatoire du scénario
+            // --- OPTIMISATION TABLETTE/MOBILE (Low-Res Rendering) ---
+            const svgElement = document.getElementById('melt-svg');
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            
+            // On calcule une résolution "logique" plus faible.
+            // Au lieu d'avoir 2000px de large, on force le SVG à calculer sur 600px max
+            // Le CSS va étirer le résultat, mais le calcul sera 10x plus rapide.
+            const maxDimension = 600; 
+            const ratio = w / h;
+            
+            let viewW, viewH;
+            if (w > h) {
+                viewW = maxDimension;
+                viewH = maxDimension / ratio;
+            } else {
+                viewH = maxDimension;
+                viewW = maxDimension * ratio;
+            }
+            
+            // Application de la "fausse" résolution
+            svgElement.setAttribute('viewBox', `0 0 ${viewW} ${viewH}`);
+
+            // --- SCENARIO ---
             const preset = meltPresets[Math.floor(Math.random() * meltPresets.length)];
-            // On peut aussi changer le "seed" pour que le motif de bruit ne soit jamais le même
             const randomSeed = Math.floor(Math.random() * 100);
 
-            // 2. Initialisation du SVG avec le preset choisi
             const displacementMap = document.getElementById('map-layer');
             const turbulence = document.getElementById('noise-layer');
-            const svgElement = document.getElementById('melt-svg');
             const loaderContainer = document.getElementById('loader-container');
             const mainSite = document.getElementById('main-site');
 
             turbulence.setAttribute('type', preset.type);
             turbulence.setAttribute('numOctaves', preset.octaves);
             turbulence.setAttribute('seed', randomSeed);
-            // On fixe la fréquence de départ tout de suite
             turbulence.setAttribute('baseFrequency', `${preset.freqStartX} ${preset.freqStartY}`);
 
-            // 3. Animation
+            // --- ANIMATION ---
             const duration = 3800; 
             let startTime = null;
 
@@ -245,40 +274,41 @@
                 if (progress < 1) {
                     let ease, scaleVal, currentFreqX, currentFreqY;
 
-                    // Interpolation de la fréquence (transition fluide du début à la fin)
-                    // Cela permet de passer de l'état "Glitch horizontal" à "Glitch vertical" par exemple
+                    // Interpolation (Maths simplifiées)
                     currentFreqX = preset.freqStartX + (preset.freqEndX - preset.freqStartX) * progress;
                     currentFreqY = preset.freqStartY + (preset.freqEndY - preset.freqStartY) * progress;
 
-                    // --- COURBE DE TEMPS (HYPNOSE) ---
+                    // Arrondir les valeurs aide légèrement le navigateur
+                    // currentFreqX = Math.floor(currentFreqX * 1000) / 1000;
+                    // currentFreqY = Math.floor(currentFreqY * 1000) / 1000;
+
+                    // COURBE HYPNOSE
                     if (progress < 0.2) {
-                        // Phase 1 : Attaque
                         ease = progress * 5; 
                         scaleVal = ease * 200; 
                     } 
                     else if (progress < 0.85) {
-                        // Phase 2 : Hypnose (Lent)
                         const subProgress = (progress - 0.2) / 0.65;
-                        scaleVal = 200 + (subProgress * (preset.maxScale * 0.4)); // Monte doucement
+                        scaleVal = 200 + (subProgress * (preset.maxScale * 0.4)); 
                     } 
                     else {
-                        // Phase 3 : Disparition (Vite)
                         const subProgress = (progress - 0.85) / 0.15;
                         scaleVal = (200 + (preset.maxScale * 0.4)) + (subProgress * (preset.maxScale * 0.6));
                         
-                        // Fade out visuel
                         if (subProgress > 0.5) {
                             svgElement.style.opacity = 1 - ((subProgress - 0.5) * 2);
                         }
                     }
 
-                    // Application
+                    // Application des attributs
                     displacementMap.setAttribute('scale', scaleVal);
+                    
+                    // Optimisation: on ne change la fréquence que 1 frame sur 2 pour alléger la charge
+                    // Mais ici on garde fluide car la résolution est baissée.
                     turbulence.setAttribute('baseFrequency', `${currentFreqX} ${currentFreqY}`);
 
                     requestAnimationFrame(animateHypnosis);
                 } else {
-                    // Fin
                     svgElement.style.opacity = '0';
                     setTimeout(() => {
                         loaderContainer.style.display = 'none';
@@ -287,7 +317,6 @@
                 }
             }
 
-            // Attente de 1.2s avant de lancer
             setTimeout(() => {
                 requestAnimationFrame(animateHypnosis);
             }, 1200);
