@@ -24,30 +24,27 @@
             position: fixed;
         }
 
-        /* --- LOADER SVG (PIED DE POULE) --- */
+        /* --- LOADER (FOND BLANC + SVG) --- */
         #loader-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9999;
-            background: white;
+            background: white; /* Le fond reste blanc quand le motif s'efface */
             display: flex; align-items: center; justify-content: center;
-            overflow: hidden;
             pointer-events: none;
         }
 
-        /* Le SVG remplit l'écran */
         #melt-svg {
             width: 100%; height: 100%;
             display: block;
-            /* On s'assure qu'il reste net au début */
-            shape-rendering: geometricPrecision; 
+            opacity: 1;
+            /* Transition pour la disparition finale vers le blanc */
+            transition: opacity 0.4s ease-out; 
         }
 
         /* --- SITE PRINCIPAL --- */
         #main-site {
-            opacity: 0; /* Caché au départ */
-            /* Transition beaucoup plus lente et douce (3s) */
-            transition: opacity 3s ease-in-out;
-            
+            opacity: 0; /* Totalement invisible au début */
+            transition: opacity 1.5s ease; /* Apparition douce après le blanc */
             padding: 40px; max-width: 960px; margin: 0 auto;
             height: 100%; box-sizing: border-box;
             display: flex; flex-direction: column;
@@ -55,8 +52,8 @@
             z-index: 1;
         }
 
-        /* Classe ajoutée en JS pour révéler le site */
-        #main-site.revealed {
+        /* Classe pour afficher le site */
+        #main-site.visible {
             opacity: 1;
         }
 
@@ -94,29 +91,26 @@
 </head>
 <body>
 
-    <!-- LOADER AVEC EFFET FONTE -->
+    <!-- LOADER -->
     <div id="loader-container">
         <svg id="melt-svg" preserveAspectRatio="none">
             <defs>
-                <!-- Motif Pied de Poule -->
                 <pattern id="houndstooth" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
                     <path d="M0,0 L20,20 L40,0 L40,20 L20,40 L0,20 Z M20,0 L40,0 L40,20 L20,20 Z M0,20 L20,20 L20,40 L0,40 Z" fill="black"/>
                 </pattern>
                 
-                <!-- Filtre de distorsion liquide avancé -->
                 <filter id="plastic-melt" x="-20%" y="-20%" width="140%" height="140%">
-                    <!-- On change 'fractalNoise' pour 'turbulence' pour un effet plus tranchant/chimique -->
-                    <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="2" result="noise" seed="5" />
-                    <!-- Scale à 0 au début = pas de déformation -->
+                    <!-- Turbulence liquide -->
+                    <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="1" result="noise" seed="1" />
+                    <!-- Displacement (Scale démarre à 0) -->
                     <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
                 </filter>
             </defs>
-            
-            <!-- Rectangle rempli par le motif -->
             <rect id="pattern-rect" width="100%" height="100%" fill="url(#houndstooth)" style="filter: url(#plastic-melt);" />
         </svg>
     </div>
 
+    <!-- SITE -->
     <div id="main-site">
         <header>
             <h1 onclick="goHome()">GUILLAUME ROBINET</h1>
@@ -198,63 +192,79 @@
             changeImage();
         }
 
-        // --- ANIMATION PLASTIQUE FONDU (WEIRD & SLOW) ---
+        // --- ANIMATION HYPNOTIQUE ---
         window.onload = function() {
             changeImage();
 
             const displacementMap = document.querySelector('feDisplacementMap');
             const turbulence = document.querySelector('feTurbulence');
+            const svgElement = document.getElementById('melt-svg');
             const loaderContainer = document.getElementById('loader-container');
             const mainSite = document.getElementById('main-site');
             
-            // On ralentit : 4500ms = 4.5 secondes
-            const duration = 4500; 
+            // Temps total de l'animation de fonte : 3.8s (Sidération)
+            const duration = 3800; 
             const startTime = Date.now();
 
-            function animateMelt() {
+            function animateHypnosis() {
                 const now = Date.now();
-                const progress = (now - startTime) / duration; // De 0 à 1
+                const progress = (now - startTime) / duration; // 0 à 1
 
                 if (progress < 1) {
-                    // Courbe d'accélération progressive (ease-in-out)
-                    // Le début est lent, le milieu accélère, la fin ralentit un peu
-                    const ease = progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress;
-                    
-                    // 1. DISTORSION (SCALE)
-                    // On va très loin dans la distorsion (jusqu'à 1500px) pour déchirer l'image
-                    const currentScale = Math.pow(progress, 3) * 1500; 
-                    displacementMap.setAttribute('scale', currentScale);
+                    let ease, scaleVal, freqVal;
 
-                    // 2. TEXTURE DU BRUIT (FREQUENCY) - C'est ça qui fait "Bizarre"
-                    // On commence avec un bruit fin (0.04) et on finit avec de grosses vagues (0.005)
-                    // Ça donne l'impression que le plastique s'épaissit en fondant
-                    const baseFreq = 0.04 - (progress * 0.035); 
-                    // On étire un peu plus en Y qu'en X pour un effet de gravité (coulure)
-                    turbulence.setAttribute('baseFrequency', `${baseFreq} ${baseFreq * 0.5}`);
-
-                    // 3. OPACITÉ DU LOADER
-                    // On garde le motif visible longtemps (jusqu'à 60% de l'anim), puis on fade out
-                    if (progress > 0.6) {
-                        // Fade out progressif sur la fin
-                        const fadeProgress = (progress - 0.6) / 0.4; // 0 à 1 sur la fin
-                        loaderContainer.style.opacity = 1 - fadeProgress;
+                    // LE SECRET : La courbe de vitesse en 3 temps
+                    if (progress < 0.2) {
+                        // PHASE 1 : Attaque (0% à 20%) - Rapide
+                        // Le motif commence à bouger normalement
+                        ease = progress * 5; // monte de 0 à 1
+                        scaleVal = ease * 200; 
+                        freqVal = 0.02;
+                    } 
+                    else if (progress < 0.85) {
+                        // PHASE 2 : HYPNOSE (20% à 85%) - Décélérée / Lente
+                        // C'est le moment "weird". On ralentit drastiquement la progression de la distorsion.
+                        // On avance de 20% à 85% du temps, mais la distorsion n'augmente que doucement.
+                        const subProgress = (progress - 0.2) / 0.65; // 0 à 1 dans cette phase
                         
-                        // Faire apparaitre le site doucement
-                        mainSite.classList.add('revealed');
+                        // Mouvement lent et visqueux
+                        scaleVal = 200 + (subProgress * 600); // de 200 à 800 (gros étirement mais lent)
+                        
+                        // La fréquence baisse doucement pour faire des "grosses vagues" molles
+                        freqVal = 0.02 - (subProgress * 0.015); 
+                    } 
+                    else {
+                        // PHASE 3 : FIN (85% à 100%) - Accélération finale
+                        // Ça s'emballe pour disparaitre
+                        const subProgress = (progress - 0.85) / 0.15;
+                        scaleVal = 800 + (subProgress * 1000); // Explosion vers 1800
+                        freqVal = 0.005; // Très liquide
+                        
+                        // À la toute fin (95%), on commence à fade out le motif vers le blanc
+                        if (subProgress > 0.5) {
+                            svgElement.style.opacity = 1 - ((subProgress - 0.5) * 2);
+                        }
                     }
 
-                    requestAnimationFrame(animateMelt);
+                    // Application des valeurs
+                    displacementMap.setAttribute('scale', scaleVal);
+                    turbulence.setAttribute('baseFrequency', `${freqVal} ${freqVal}`);
+
+                    requestAnimationFrame(animateHypnosis);
                 } else {
-                    // Fin propre
-                    loaderContainer.style.display = 'none';
-                    mainSite.classList.add('revealed');
+                    // FIN DE L'ANIMATION : Écran Blanc
+                    svgElement.style.opacity = '0';
+                    
+                    // Petite pause sur le BLANC TOTAL (0.3s) pour marquer la transition
+                    setTimeout(() => {
+                        loaderContainer.style.display = 'none'; // On retire le loader
+                        mainSite.classList.add('visible'); // Le site apparait doucement
+                    }, 300);
                 }
             }
 
-            // Petite pause statique (0.8s) avant de commencer à fondre pour instaurer le malaise
-            setTimeout(() => {
-                requestAnimationFrame(animateMelt);
-            }, 800);
+            // Départ immédiat mais smooth
+            requestAnimationFrame(animateHypnosis);
         };
     </script>
 </body>
