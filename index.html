@@ -36,13 +36,12 @@
         #melt-svg {
             width: 100%; height: 100%;
             display: block;
-            /* Pas de transition CSS ici, on veut du CUT brutal */
         }
 
         /* --- SITE --- */
         #main-site {
-            opacity: 0; 
-            transition: opacity 2.0s ease; /* Apparition lente après la violence des cuts */
+            opacity: 0;
+            /* PAS DE TRANSITION : Apparition CUT */
             padding: 40px; max-width: 960px; margin: 0 auto;
             height: 100%; box-sizing: border-box;
             display: flex; flex-direction: column;
@@ -92,12 +91,12 @@
                     <path d="M0,0 L20,20 L40,0 L40,20 L20,40 L0,20 Z M20,0 L40,0 L40,20 L20,20 Z M0,20 L20,20 L20,40 L0,40 Z" fill="black"/>
                 </pattern>
                 
-                <filter id="strobe-melt" x="-20%" y="-20%" width="140%" height="140%">
+                <filter id="responsive-melt" x="-20%" y="-20%" width="140%" height="140%">
                     <feTurbulence id="noise-layer" type="turbulence" baseFrequency="0.02" numOctaves="1" result="noise" seed="0" />
                     <feDisplacementMap id="map-layer" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
                 </filter>
             </defs>
-            <rect id="pattern-rect" width="100%" height="100%" fill="url(#houndstooth)" style="filter: url(#strobe-melt);" />
+            <rect id="pattern-rect" width="100%" height="100%" fill="url(#houndstooth)" style="filter: url(#responsive-melt);" />
         </svg>
     </div>
 
@@ -154,70 +153,104 @@
             document.getElementById('home-view').style.display = 'flex';
         }
 
-        // --- PRESETS (Textures aléatoires) ---
-        const presets = [
-            { type: "turbulence", freqBase: 0.015, octaves: 1 }, // Visqueux
-            { type: "turbulence", freqBase: 0.04, octaves: 1 },  // Serré / Electrique
-            { type: "fractalNoise", freqBase: 0.02, octaves: 2 } // Nuageux / Lisse
-        ];
-
         window.onload = function() {
             changeImage();
 
-            // 1. Initialisation
-            const chosenPreset = presets[Math.floor(Math.random() * presets.length)];
-            const randomSeed = Math.floor(Math.random() * 100);
+            // --- DETECTION DEVICE ---
+            const width = window.innerWidth;
+            const isDesktop = width > 768; // Tablette et Desktop
 
+            // Facteur de "zoom" de la déformation selon la taille de l'écran
+            // Sur mobile, on multiplie par 0.5, sur desktop par 0.8 car l'écran est très large
+            const scaleMultiplier = isDesktop ? 1.2 : 0.6; 
+
+            // --- CONFIGURATION ---
             const turbulence = document.getElementById('noise-layer');
             const displacement = document.getElementById('map-layer');
             const svgContainer = document.getElementById('loader-container');
             const mainSite = document.getElementById('main-site');
 
-            // Appliquer le preset
-            turbulence.setAttribute('type', chosenPreset.type);
-            turbulence.setAttribute('baseFrequency', `${chosenPreset.freqBase} ${chosenPreset.freqBase}`);
-            turbulence.setAttribute('numOctaves', chosenPreset.octaves);
-            turbulence.setAttribute('seed', randomSeed);
+            // Presets de base
+            let baseFreq = 0.02;
+            let type = "turbulence";
+            const seed = Math.floor(Math.random() * 100);
 
-            // 2. Séquence d'animation "Stop-Motion" (Rythme Artistique)
-            // On ne calcule rien entre ces temps. C'est du "CUT".
+            // AJUSTEMENT MATIERE (Densité)
+            // Sur desktop, on baisse la fréquence pour avoir des "gros patés" au lieu de bruit fin
+            if (isDesktop) {
+                baseFreq = 0.009; // Plus petit chiffre = motifs plus gros/zoomés
+            } else {
+                baseFreq = 0.02; // Mobile
+            }
+
+            turbulence.setAttribute('type', type);
+            turbulence.setAttribute('baseFrequency', `${baseFreq} ${baseFreq}`);
+            turbulence.setAttribute('numOctaves', "1");
+            turbulence.setAttribute('seed', seed);
+
+
+            // --- SEQUENCES DIFFERENCIÉES ---
             
-            const sequence = [
-                // T = 0 : Image intacte
-                
-                // CUT 1 : 1200ms - Premier impact (léger)
-                { time: 1200, scale: 150,  freqMult: 1.0 }, 
-                
-                // CUT 2 : 1450ms - Deuxième impact (très rapide après le 1er, effet de saccade)
-                { time: 1450, scale: 600,  freqMult: 0.8 }, 
-                
-                // CUT 3 : 1900ms - Pause... puis Destruction totale (Gros scale, basse fréquence)
-                { time: 1900, scale: 2500, freqMult: 0.3 }, 
-                
-                // CUT 4 : 2100ms - Ecran Blanc
-                { time: 2100, clear: true },
-                
-                // FIN : 2500ms - Apparition Site
-                { time: 2500, showSite: true }
-            ];
+            let sequence = [];
 
-            // 3. Exécution de la séquence
+            if (!isDesktop) {
+                // SEQUENCE MOBILE (Rapide, Vif, peu de frames)
+                sequence = [
+                    // T=0 : Fixe (1.2s)
+                    { time: 1200, scale: width * 0.4,  freqMult: 1.0 }, 
+                    { time: 1450, scale: width * 1.5,  freqMult: 0.8 }, 
+                    { time: 1900, scale: width * 2.5,  freqMult: 0.3 }, 
+                    { time: 2100, clear: true },
+                    { time: 2300, showSite: true }
+                ];
+            } else {
+                // SEQUENCE TABLETTE / PC (Plus lente, plus de frames, plus majestueuse)
+                // On ajoute des étapes intermédiaires pour occuper l'espace
+                sequence = [
+                    // T=0 : Fixe (1.2s) - Temps de mémorisation
+                    
+                    // Impact 1 : Le motif se tord légèrement
+                    { time: 1200, scale: width * 0.15, freqMult: 1.0 }, 
+                    
+                    // Impact 2 : Déchirure plus franche
+                    { time: 1500, scale: width * 0.4,  freqMult: 0.9 }, 
+                    
+                    // Impact 3 : Gros lag (Stop motion)
+                    { time: 1900, scale: width * 0.8,  freqMult: 0.7 }, 
+                    
+                    // Impact 4 : La matière devient très liquide (basse fréquence)
+                    { time: 2400, scale: width * 1.5,  freqMult: 0.5 }, 
+
+                    // Impact 5 : Chaos total avant le blanc
+                    { time: 2900, scale: width * 3.0,  freqMult: 0.2 }, 
+                    
+                    // CUT : Ecran blanc
+                    { time: 3200, clear: true },
+                    
+                    // CUT : Site
+                    { time: 3500, showSite: true }
+                ];
+            }
+
+            // --- EXECUTION ---
             sequence.forEach(step => {
                 setTimeout(() => {
                     if (step.clear) {
-                        // Disparition du SVG
                         document.getElementById('melt-svg').style.display = 'none';
                     } else if (step.showSite) {
-                        // Fin totale
                         svgContainer.style.display = 'none';
                         mainSite.classList.add('visible');
                     } else {
-                        // Mise à jour brutale des valeurs (Stop-motion)
-                        const currentFreq = chosenPreset.freqBase * step.freqMult;
+                        // On applique la déformation
+                        const currentFreq = baseFreq * step.freqMult;
                         
+                        // On force la valeur calculée
                         displacement.setAttribute('scale', step.scale);
-                        // On change légèrement la fréquence pour faire bouger la texture
-                        turbulence.setAttribute('baseFrequency', `${currentFreq} ${currentFreq}`);
+                        
+                        // Petite variation de la fréquence pour animer la matière
+                        // On ajoute une micro variation aléatoire pour que ça ne soit pas trop "mathématique"
+                        const jitter = (Math.random() * 0.002) - 0.001;
+                        turbulence.setAttribute('baseFrequency', `${currentFreq + jitter} ${currentFreq + jitter}`);
                     }
                 }, step.time);
             });
